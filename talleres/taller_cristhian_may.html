@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funciones lineales - Biblioteca Digital</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body);"></script>
+<style>
+  :root {
+    --primary: #003366;
+    --secondary: #00796B;
+    --accent: #D84315;
+    --bg-light: #F5F7FA;
+    --bg-green: #E0F2F1;
+    --bg-orange: #FBE9E7;
+    --text-dark: #2C3E50;
+    --text-gray: #5D6D7E;
+    --border: #E0E6ED;
+    --shadow: rgba(0, 0, 0, 0.08);
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+    color: var(--text-dark);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  .taller-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px var(--shadow);
+    overflow: hidden;
+  }
+  
+  /* HEADER */
+  .taller-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #0052cc 100%);
+    color: white;
+    padding: 30px 40px;
+    border-bottom: 4px solid var(--secondary);
+  }
+  
+  .taller-header .universidad {
+    font-size: 0.95em;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  
+  .taller-header h1 {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  
+  .taller-header .subtitulo {
+    font-size: 1.05em;
+    opacity: 0.95;
+    font-weight: 300;
+  }
+  
+  /* NAVEGACIÓN SUPERIOR */
+  .nav-bar {
+    background: var(--bg-light);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .paso-contador {
+    font-size: 0.95em;
+    color: var(--text-gray);
+    font-weight: 600;
+  }
+  
+  .paso-contador span {
+    color: var(--primary);
+    font-size: 1.1em;
+  }
+  
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .nav-btn {
+    background: white;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  
+  .nav-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+  }
+  
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  
+  .nav-btn.siguiente {
+    background: var(--primary);
+    color: white;
+  }
+  
+  .nav-btn.siguiente:hover:not(:disabled) {
+    background: #002244;
+  }
+  
+  /* CONTENIDO */
+  .taller-content {
+    padding: 40px;
+    min-height: 500px;
+  }
+  
+  .paso {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  
+  .paso.activo {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .paso h2 {
+    color: var(--primary);
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary);
+  }
+  
+  .paso h3 {
+    color: var(--secondary);
+    font-size: 1.25em;
+    margin: 20px 0 12px 0;
+    font-weight: 600;
+  }
+  
+  .paso p {
+    margin-bottom: 15px;
+    font-size: 1.05em;
+  }
+  
+  .paso strong {
+    color: var(--primary);
+  }
+  
+  /* CAJAS DE CONTENIDO */
+  .caja-enunciado {
+    background: var(--bg-light);
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 5px solid var(--primary);
+    margin: 20px 0;
+  }
+  
+  .caja-enunciado p {
+    margin-bottom: 12px;
+  }
+  
+  .caja-datos {
+    background: var(--bg-green);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary);
+    margin: 15px 0;
+  }
+  
+  .caja-datos ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .caja-datos li {
+    padding: 6px 0 6px 30px;
+    position: relative;
+  }
+  
+  .caja-datos li:before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--secondary);
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+  
+  .caja-marco {
+    background: #FFF8E1;
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 5px solid #F9A825;
+    margin: 20px 0;
+  }
+  
+  .caja-marco h3 {
+    color: #F57F17;
+    margin-top: 0;
+  }
+  
+  .caja-marco ul {
+    margin: 10px 0 10px 25px;
+  }
+  
+  .caja-marco li {
+    margin-bottom: 8px;
+  }
+  
+  /* ECUACIONES */
+  .ecuacion {
+    background: var(--bg-light);
+    padding: 18px;
+    border-radius: 8px;
+    margin: 18px 0;
+    text-align: center;
+    font-size: 1.15em;
+    border: 1px solid var(--border);
+  }
+  
+  .resultado-box {
+    background: var(--secondary);
+    color: white;
+    padding: 18px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.15em;
+    font-weight: 600;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+  }
+  
+  .resultado-box .katex {
+    color: white;
+  }
+  
+  /* GRÁFICO */
+  .grafico-container {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  .grafico-container svg {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* INTERPRETACIÓN */
+  .caja-interpreta {
+    background: var(--bg-orange);
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 5px solid var(--accent);
+    margin: 20px 0;
+  }
+  
+  .caja-interpreta h3 {
+    color: var(--accent);
+    margin-top: 0;
+  }
+  
+  .caja-interpreta ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+  }
+  
+  .caja-interpreta li {
+    padding: 10px 0 10px 30px;
+    position: relative;
+    font-size: 1.02em;
+  }
+  
+  .caja-interpreta li:before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  
+  .caja-interpreta strong {
+    color: var(--accent);
+  }
+  
+  /* BARRA DE PROGRESO */
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    position: relative;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary), var(--primary));
+    transition: width 0.4s ease;
+  }
+  
+  @media (max-width: 768px) {
+    .taller-header {
+      padding: 25px 20px;
+    }
+    
+    .taller-header h1 {
+      font-size: 1.4em;
+    }
+    
+    .taller-content {
+      padding: 25px 20px;
+    }
+    
+    .nav-bar {
+      padding: 12px 20px;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="taller-container">
+  
+  <!-- HEADER -->
+  <div class="taller-header">
+    <div class="universidad">Universidad San Ignacio de Loyola · Matemática I · PC2 2026-II</div>
+    <h1>Funciones lineales</h1>
+    <div class="subtitulo">Crecimiento de una Biblioteca Digital</div>
+  </div>
+  
+  <!-- BARRA DE PROGRESO -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 8.33%"></div>
+  </div>
+  
+  <!-- NAVEGACIÓN -->
+  <div class="nav-bar">
+    <div class="paso-contador">Paso <span id="pasoActual">1</span> de <span id="totalPasos">12</span></div>
+    <div class="nav-buttons">
+      <button class="nav-btn anterior" id="btnAnterior" onclick="cambiarPaso(-1)" disabled>◀ Anterior</button>
+      <button class="nav-btn siguiente" id="btnSiguiente" onclick="cambiarPaso(1)">Siguiente ▶</button>
+    </div>
+  </div>
+  
+  <!-- CONTENIDO -->
+  <div class="taller-content">
+    
+    <!-- PASO 1: PORTADA -->
+    <div class="paso activo" id="paso1">
+      <h2>Bienvenido al Taller</h2>
+      <p>En este taller interactivo resolveremos un problema de <strong>funciones lineales</strong> aplicado al crecimiento de una biblioteca digital universitaria.</p>
+      
+      <div class="caja-marco">
+        <h3>📚 ¿Qué aprenderás?</h3>
+        <ul>
+          <li>Identificar pares ordenados a partir de un enunciado.</li>
+          <li>Calcular la pendiente e interpretar su significado.</li>
+          <li>Construir la función lineal \(N(t) = mt + b\).</li>
+          <li>Evaluar la función en un punto dado.</li>
+          <li>Resolver una ecuación lineal para encontrar el tiempo de ampliación.</li>
+          <li>Representar gráficamente el modelo y sus puntos clave.</li>
+        </ul>
+      </div>
+      
+      <p>Presiona <strong>Siguiente</strong> para comenzar con el enunciado del problema.</p>
+    </div>
+    
+    <!-- PASO 2: ENUNCIADO -->
+    <div class="paso" id="paso2">
+      <h2>Enunciado del Problema</h2>
+      
+      <div class="caja-enunciado">
+        <p>Una biblioteca universitaria cuenta inicialmente con <strong>2500 libros digitalizados</strong>. Después de <strong>6 meses</strong>, la cantidad de libros digitalizados aumenta a <strong>4500</strong>. Se supone que el crecimiento es lineal. La biblioteca deberá ampliar su capacidad de almacenamiento cuando se alcancen <strong>5500 libros</strong>.</p>
+        <p>Sea \(N(t)\) la cantidad de libros digitalizados después de \(t\) meses.</p>
+      </div>
+      
+      <h3>Se pide:</h3>
+      <div class="caja-datos">
+        <ul>
+          <li><strong>a)</strong> Determine la función lineal \(N(t)\).</li>
+          <li><strong>b)</strong> Interprete la pendiente y calcule la cantidad de libros digitalizados después de 4 meses.</li>
+          <li><strong>c)</strong> Determine cuándo deberá ampliarse la capacidad de almacenamiento y justifique mediante el modelo matemático.</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- PASO 3: MARCO TEÓRICO -->
+    <div class="paso" id="paso3">
+      <h2>Marco Teórico</h2>
+      
+      <div class="caja-marco">
+        <h3>Función Lineal</h3>
+        <p>Una <strong>función lineal</strong> modela relaciones con tasa de cambio constante y se expresa como:</p>
+        <div class="ecuacion">
+          \(N(t) = mt + b\)
+        </div>
+        <p>donde:</p>
+        <ul>
+          <li><strong>\(m\) (Pendiente):</strong> Es la tasa de cambio. Se calcula como \(m = \dfrac{N(t_2) - N(t_1)}{t_2 - t_1}\). Indica cuánto varía \(N\) por cada unidad de \(t\).</li>
+          <li><strong>\(b\) (Ordenada al origen):</strong> Es el valor inicial de la función cuando \(t = 0\).</li>
+        </ul>
+      </div>
+      
+      <h3>Método de resolución</h3>
+      <ol style="margin-left: 25px;">
+        <li>Identificar los pares ordenados \((t, N)\).</li>
+        <li>Calcular la pendiente \(m\).</li>
+        <li>Determinar la ordenada al origen \(b\).</li>
+        <li>Construir la función \(N(t)\).</li>
+        <li>Resolver la incógnita planteada.</li>
+      </ol>
+    </div>
+    
+    <!-- PASO 4: IDENTIFICAR DATOS -->
+    <div class="paso" id="paso4">
+      <h2>Inciso a: Identificar los datos</h2>
+      
+      <p>Del enunciado extraemos los <strong>pares ordenados</strong> \((t, N(t))\):</p>
+      
+      <div class="caja-datos">
+        <ul>
+          <li><strong>Valor inicial (tiempo 0):</strong> \((t_1, N_1) = (0, 2500)\)</li>
+          <li><strong>Después de 6 meses:</strong> \((t_2, N_2) = (6, 4500)\)</li>
+        </ul>
+      </div>
+      
+      <p>Estos dos puntos son suficientes para determinar la recta que modela el crecimiento de la biblioteca.</p>
+    </div>
+    
+    <!-- PASO 5: CALCULAR PENDIENTE -->
+    <div class="paso" id="paso5">
+      <h2>Inciso a: Calcular la pendiente \(m\)</h2>
+      
+      <p>Sustituimos los pares ordenados en la fórmula de la pendiente:</p>
+      
+      <div class="ecuacion">
+        \(m = \frac{N(t_2) - N(t_1)}{t_2 - t_1} = \frac{4500 - 2500}{6 - 0} = \frac{2000}{6} = \frac{1000}{3}\)
+      </div>
+      
+      <div class="resultado-box">
+        \(m = \dfrac{1000}{3} \approx 333.33 \text{ libros/mes}\)
+      </div>
+      
+      <p>La pendiente representa la <strong>tasa constante de digitalización</strong> de la biblioteca.</p>
+    </div>
+    
+    <!-- PASO 6: ORDENADA AL ORIGEN -->
+    <div class="paso" id="paso6">
+      <h2>Inciso a: Determinar la ordenada al origen \(b\)</h2>
+      
+      <p>Como el valor inicial corresponde a \(t = 0\), la ordenada al origen se lee directamente del primer par ordenado:</p>
+      
+      <div class="ecuacion">
+        \(N(0) = 2500 \implies b = 2500\)
+      </div>
+      
+      <p>Esto significa que al inicio del programa de digitalización, la biblioteca ya contaba con <strong>2500 libros</strong> en su repositorio.</p>
+    </div>
+    
+    <!-- PASO 7: CONSTRUIR FUNCIÓN -->
+    <div class="paso" id="paso7">
+      <h2>Inciso a: Construir la función \(N(t)\)</h2>
+      
+      <p>Sustituyendo \(m = \dfrac{1000}{3}\) y \(b = 2500\) en la forma general \(N(t) = mt + b\):</p>
+      
+      <div class="resultado-box">
+        \(N(t) = \dfrac{1000}{3}\,t + 2500\)
+      </div>
+      
+      <p>Esta es la función lineal que modela el crecimiento de la biblioteca digital en función del tiempo \(t\) (en meses).</p>
+    </div>
+    
+    <!-- PASO 8: INTERPRETAR PENDIENTE -->
+    <div class="paso" id="paso8">
+      <h2>Inciso b: Interpretar la pendiente</h2>
+      
+      <div class="caja-interpreta">
+        <h3>Significado de \(m = \dfrac{1000}{3}\)</h3>
+        <p>La pendiente indica que la biblioteca universitaria <strong>digitaliza aproximadamente 333 libros por mes</strong>. Representa la tasa constante de incorporación de nuevos libros digitalizados al sistema.</p>
+        <p>Este valor refleja un <strong>programa de digitalización activo y sostenido</strong>, con un ritmo constante de trabajo a lo largo del tiempo.</p>
+      </div>
+    </div>
+    
+    <!-- PASO 9: CALCULAR N(4) -->
+    <div class="paso" id="paso9">
+      <h2>Inciso b: Calcular \(N(4)\)</h2>
+      
+      <p>Evaluamos la función en \(t = 4\) meses:</p>
+      
+      <div class="ecuacion">
+        \(N(4) = \frac{1000}{3}(4) + 2500 = \frac{4000}{3} + 2500 \approx 1333.33 + 2500\)
+      </div>
+      
+      <div class="resultado-box">
+        \(N(4) \approx 3833 \text{ libros digitalizados}\)
+      </div>
+      
+      <p>Después de 4 meses, la biblioteca contendrá aproximadamente <strong>3833 libros</strong>, lo que representa un incremento del <strong>53.3%</strong> respecto a la capacidad inicial.</p>
+    </div>
+    
+    <!-- PASO 10: INCISO C -->
+    <div class="paso" id="paso10">
+      <h2>Inciso c: Determinar cuándo ampliar el sistema</h2>
+      
+      <p>La biblioteca debe ampliarse cuando \(N(t) = 5500\). Igualamos la función a este umbral:</p>
+      
+      <div class="ecuacion">
+        \(\frac{1000}{3}t + 2500 = 5500
+      </div>
+      
+      <p>Restamos 2500 en ambos lados:</p>
+      
+      <div class="ecuacion">
+        \(\frac{1000}{3}t = 3000
+      </div>
+      
+      <p>Multiplicamos ambos lados por \(\dfrac{3}{1000}\):</p>
+      
+      <div class="ecuacion">
+        \(t = 3000 \times \frac{3}{1000} = 9
+      </div>
+      
+      <div class="resultado-box">
+        \(t = 9 \text{ meses}\)
+      </div>
+    </div>
+    
+    <!-- PASO 11: GRÁFICO -->
+    <div class="paso" id="paso11">
+      <h2>Representación Gráfica</h2>
+      
+      <div class="grafico-container">
+        <svg viewBox="0 0 950 600" xmlns="http://www.w3.org/2000/svg">
+          <!-- Fondo -->
+          <rect width="950" height="600" fill="#fafafa"/>
+          
+          <!-- Título -->
+          <text x="475" y="35" font-size="20" font-weight="bold" fill="#003366" text-anchor="middle">
+            Modelo de Crecimiento de la Biblioteca Digital
+          </text>
+          <text x="475" y="58" font-size="14" fill="#5D6D7E" text-anchor="middle">
+            N(t) = (1000/3)t + 2500
+          </text>
+          
+          <!-- Escala: Eje X: 0-12 meses → 100-820 px (60 px/mes) -->
+          <!-- Eje Y: 0-7000 libros → 520-80 px (0.06286 px/libro) -->
+          
+          <!-- Área sombreada zona operativa (t <= 9) -->
+          <polygon points="100,520 100,215.71 640,215.71 640,520" fill="#00796B" opacity="0.15"/>
+          
+          <!-- Área sombreada zona ampliación (t > 9) -->
+          <polygon points="640,215.71 640,520 820,520 820,80" fill="#D84315" opacity="0.15"/>
+          
+          <!-- Cuadrícula horizontal -->
+          <line x1="100" y1="457.14" x2="820" y2="457.14" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="100" y1="394.29" x2="820" y2="394.29" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="100" y1="331.43" x2="820" y2="331.43" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="100" y1="268.57" x2="820" y2="268.57" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="100" y1="205.71" x2="820" y2="205.71" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="100" y1="142.86" x2="820" y2="142.86" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          
+          <!-- Cuadrícula vertical -->
+          <line x1="220" y1="80" x2="220" y2="520" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="340" y1="80" x2="340" y2="520" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="460" y1="80" x2="460" y2="520" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="580" y1="80" x2="580" y2="520" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="700" y1="80" x2="700" y2="520" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,4"/>
+          
+          <!-- Ejes principales -->
+          <line x1="100" y1="520" x2="840" y2="520" stroke="#37474F" stroke-width="2.5"/>
+          <line x1="100" y1="520" x2="100" y2="70" stroke="#37474F" stroke-width="2.5"/>
+          
+          <!-- Flechas -->
+          <polygon points="840,520 830,515 830,525" fill="#37474F"/>
+          <polygon points="100,70 95,80 105,80" fill="#37474F"/>
+          
+          <!-- Etiquetas de ejes -->
+          <text x="800" y="545" font-size="15" font-weight="bold" fill="#37474F">t (meses)</text>
+          <text x="50" y="80" font-size="15" font-weight="bold" fill="#37474F">N(t) (libros)</text>
+          
+          <!-- Marcas eje X -->
+          <line x1="100" y1="515" x2="100" y2="525" stroke="#37474F" stroke-width="2"/>
+          <text x="100" y="545" font-size="13" fill="#37474F" text-anchor="middle" font-weight="bold">0</text>
+          
+          <line x1="220" y1="515" x2="220" y2="525" stroke="#37474F" stroke-width="2"/>
+          <text x="220" y="545" font-size="13" fill="#37474F" text-anchor="middle">2</text>
+          
+          <line x1="340" y1="515" x2="340" y2="525" stroke="#37474F" stroke-width="2"/>
+          <text x="340" y="545" font-size="13" fill="#37474F" text-anchor="middle">4</text>
+          
+          <line x1="460" y1="515" x2="460" y2="525" stroke="#37474F" stroke-width="2"/>
+          <text x="460" y="545" font-size="13" fill="#37474F" text-anchor="middle">6</text>
+          
+          <line x1="580" y1="515" x2="580" y2="525" stroke="#37474F" stroke-width="2"/>
+          <text x="580" y="545" font-size="13" fill="#37474F" text-anchor="middle">8</text>
+          
+          <line x1="640" y1="515" x2="640" y2="525" stroke="#D84315" stroke-width="3"/>
+          <text x="640" y="545" font-size="13" fill="#D84315" text-anchor="middle" font-weight="bold">9</text>
+          
+          <line x1="700" y1="515" x2="700" y2="525" stroke="#37474F" stroke-width="2"/>
+          <text x="700" y="545" font-size="13" fill="#37474F" text-anchor="middle">10</text>
+          
+          <line x1="820" y1="515" x2="820" y2="525" stroke="#37474F" stroke-width="2"/>
+          <text x="820" y="545" font-size="13" fill="#37474F" text-anchor="middle">12</text>
+          
+          <!-- Marcas eje Y -->
+          <line x1="95" y1="520" x2="105" y2="520" stroke="#37474F" stroke-width="2"/>
+          <text x="85" y="525" font-size="13" fill="#37474F" text-anchor="end">0</text>
+          
+          <line x1="95" y1="457.14" x2="105" y2="457.14" stroke="#37474F" stroke-width="2"/>
+          <text x="85" y="462" font-size="13" fill="#37474F" text-anchor="end">1000</text>
+          
+          <line x1="95" y1="394.29" x2="105" y2="394.29" stroke="#37474F" stroke-width="2"/>
+          <text x="85" y="399" font-size="13" fill="#37474F" text-anchor="end">2000</text>
+          
+          <line x1="95" y1="331.43" x2="105" y2="331.43" stroke="#37474F" stroke-width="2"/>
+          <text x="85" y="336" font-size="13" fill="#37474F" text-anchor="end">3000</text>
+          
+          <line x1="95" y1="268.57" x2="105" y2="268.57" stroke="#37474F" stroke-width="2"/>
+          <text x="85" y="273" font-size="13" fill="#37474F" text-anchor="end">4000</text>
+          
+          <line x1="95" y1="205.71" x2="105" y2="205.71" stroke="#37474F" stroke-width="2"/>
+          <text x="85" y="210" font-size="13" fill="#37474F" text-anchor="end">5000</text>
+          
+          <line x1="95" y1="215.71" x2="105" y2="215.71" stroke="#D84315" stroke-width="2.5"/>
+          <text x="85" y="220" font-size="13" fill="#D84315" text-anchor="end" font-weight="bold">5500</text>
+          
+          <line x1="95" y1="142.86" x2="105" y2="142.86" stroke="#37474F" stroke-width="2"/>
+          <text x="85" y="147" font-size="13" fill="#37474F" text-anchor="end">6000</text>
+          
+          <line x1="95" y1="80" x2="105" y2="80" stroke="#37474F" stroke-width="2"/>
+          <text x="85" y="85" font-size="13" fill="#37474F" text-anchor="end">7000</text>
+          
+          <!-- Línea umbral 5500 -->
+          <line x1="100" y1="215.71" x2="820" y2="215.71" stroke="#D84315" stroke-width="2.5" stroke-dasharray="10,5"/>
+          
+          <!-- Recta N(t) = (1000/3)t + 2500 -->
+          <!-- t=0 → y=362.86 ; t=12 → y=111.43 -->
+          <line x1="100" y1="362.86" x2="820" y2="111.43" stroke="#003366" stroke-width="3.5"/>
+          
+          <!-- Líneas guía t=4 -->
+          <line x1="340" y1="520" x2="340" y2="279.52" stroke="#00796B" stroke-width="2" stroke-dasharray="6,3"/>
+          <line x1="100" y1="279.52" x2="340" y2="279.52" stroke="#00796B" stroke-width="2" stroke-dasharray="6,3"/>
+          
+          <!-- Línea guía t=9 -->
+          <line x1="640" y1="520" x2="640" y2="215.71" stroke="#D84315" stroke-width="2" stroke-dasharray="6,3"/>
+          
+          <!-- Línea guía t=6 -->
+          <line x1="460" y1="520" x2="460" y2="237.14" stroke="#003366" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+          <line x1="100" y1="237.14" x2="460" y2="237.14" stroke="#003366" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.5"/>
+          
+          <!-- Puntos clave -->
+          <circle cx="100" cy="362.86" r="7" fill="#003366" stroke="white" stroke-width="2"/>
+          <circle cx="460" cy="237.14" r="7" fill="#003366" stroke="white" stroke-width="2"/>
+          <circle cx="340" cy="279.52" r="8" fill="#00796B" stroke="white" stroke-width="2"/>
+          <circle cx="640" cy="215.71" r="9" fill="#D84315" stroke="white" stroke-width="2"/>
+          
+          <!-- Etiquetas de puntos (con fondo blanco) -->
+          <rect x="115" y="345" width="145" height="28" fill="white" stroke="#e0e0e0" stroke-width="1" rx="5"/>
+          <text x="125" y="364" font-size="13" font-weight="bold" fill="#003366">Inicio: (0, 2500)</text>
+          
+          <rect x="475" y="210" width="150" height="28" fill="white" stroke="#e0e0e0" stroke-width="1" rx="5"/>
+          <text x="485" y="229" font-size="13" font-weight="bold" fill="#003366">Dato: (6, 4500)</text>
+          
+          <rect x="200" y="252" width="135" height="28" fill="white" stroke="#e0e0e0" stroke-width="1" rx="5"/>
+          <text x="210" y="271" font-size="13" font-weight="bold" fill="#00796B">4 meses: ≈3833</text>
+          
+          <rect x="655" y="185" width="175" height="28" fill="white" stroke="#e0e0e0" stroke-width="1" rx="5"/>
+          <text x="665" y="204" font-size="13" font-weight="bold" fill="#D84315">Ampliación: (9, 5500)</text>
+          
+          <!-- Etiquetas de zonas -->
+          <rect x="280" y="400" width="150" height="30" fill="white" stroke="#e0e0e0" stroke-width="1" rx="5"/>
+          <text x="290" y="420" font-size="13" font-weight="bold" fill="#00796B">Zona operativa</text>
+          
+          <rect x="680" y="300" width="150" height="30" fill="white" stroke="#e0e0e0" stroke-width="1" rx="5"/>
+          <text x="690" y="320" font-size="13" font-weight="bold" fill="#D84315">Requiere ampliación</text>
+          
+          <!-- Leyenda -->
+          <rect x="650" y="420" width="260" height="140" fill="white" stroke="#e0e0e0" stroke-width="1.5" rx="8"/>
+          <text x="780" y="440" font-size="14" font-weight="bold" fill="#37474F" text-anchor="middle">Leyenda</text>
+          
+          <line x1="665" y1="465" x2="705" y2="465" stroke="#003366" stroke-width="3.5"/>
+          <text x="715" y="470" font-size="13" fill="#37474F">N(t) = (1000/3)t + 2500</text>
+          
+          <line x1="665" y1="495" x2="705" y2="495" stroke="#D84315" stroke-width="2.5" stroke-dasharray="10,5"/>
+          <text x="715" y="500" font-size="13" fill="#37474F">Umbral: 5500 libros</text>
+          
+          <rect x="665" y="515" width="40" height="15" fill="#00796B" opacity="0.3"/>
+          <text x="715" y="527" font-size="13" fill="#37474F">Zona operativa (t ≤ 9)</text>
+          
+          <rect x="665" y="540" width="40" height="15" fill="#D84315" opacity="0.3"/>
+          <text x="715" y="552" font-size="13" fill="#37474F">Ampliación (t &gt; 9)</text>
+        </svg>
+      </div>
+      
+      <p style="text-align: center; color: var(--text-gray); font-style: italic;">
+        La gráfica muestra el crecimiento lineal de la biblioteca. El punto rojo marca el momento exacto en que se debe ampliar el sistema.
+      </p>
+    </div>
+    
+    <!-- PASO 12: INTERPRETACIÓN Y CIERRE -->
+    <div class="paso" id="paso12">
+      <h2>Interpretación del resultado</h2>
+      
+      <div class="caja-interpreta">
+        <h3>Qué significa cada resultado</h3>
+        <ul>
+          <li><strong>Función \(N(t) = \frac{1000}{3}t + 2500\):</strong> modela el crecimiento sostenido de la biblioteca digital a lo largo del tiempo.</li>
+          <li><strong>Pendiente \(m \approx 333.33\):</strong> la universidad digitaliza aproximadamente 333 libros por mes, lo que representa un programa activo y bien planificado.</li>
+          <li><strong>\(N(4) \approx 3833\):</strong> después de 4 meses se espera tener 3833 libros, un incremento del 53.3% respecto al valor inicial.</li>
+          <li><strong>\(t = 9\) meses:</strong> el sistema alcanzará su límite de capacidad (5500 libros) exactamente en el mes 9.</li>
+        </ul>
+      </div>
+      
+      <h3>Cierre</h3>
+      <div class="caja-enunciado">
+        <p>El departamento de biblioteca debe <strong>planificar y ejecutar la ampliación de la infraestructura de almacenamiento antes de cumplir los 9 meses</strong> para evitar la saturación del sistema y garantizar la continuidad del servicio de digitalización.</p>
+        <p>Este modelo lineal permite a la gerencia tomar decisiones informadas basadas en proyecciones matemáticas sólidas.</p>
+      </div>
+      
+      <div class="resultado-box" style="background: var(--primary);">
+        ✅ Solución completa: \(N(t) = \dfrac{1000}{3}t + 2500\), \(N(4) \approx 3833\), ampliación en \(t = 9\) meses.
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<script>
+  let pasoActual = 1;
+  const totalPasos = 12;
+  
+  function cambiarPaso(direccion) {
+    const nuevoPaso = pasoActual + direccion;
+    
+    if (nuevoPaso < 1 || nuevoPaso > totalPasos) return;
+    
+    // Ocultar paso actual
+    document.getElementById('paso' + pasoActual).classList.remove('activo');
+    
+    // Mostrar nuevo paso
+    pasoActual = nuevoPaso;
+    document.getElementById('paso' + pasoActual).classList.add('activo');
+    
+    // Actualizar contador
+    document.getElementById('pasoActual').textContent = pasoActual;
+    
+    // Actualizar barra de progreso
+    const progreso = (pasoActual / totalPasos) * 100;
+    document.getElementById('progressFill').style.width = progreso + '%';
+    
+    // Actualizar botones
+    document.getElementById('btnAnterior').disabled = (pasoActual === 1);
+    
+    const btnSiguiente = document.getElementById('btnSiguiente');
+    if (pasoActual === totalPasos) {
+      btnSiguiente.textContent = 'Finalizar ✓';
+      btnSiguiente.disabled = true;
+      btnSiguiente.style.opacity = '0.5';
+    } else {
+      btnSiguiente.textContent = 'Siguiente ▶';
+      btnSiguiente.disabled = false;
+      btnSiguiente.style.opacity = '1';
+    }
+    
+    // Renderizar KaTeX en el nuevo paso
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.getElementById('paso' + pasoActual));
+    }
+    
+    // Scroll al inicio del contenido
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
+  // Render inicial
+  window.addEventListener('load', () => {
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.body);
+    }
+  });
+</script>
+
+</body>
+</html>

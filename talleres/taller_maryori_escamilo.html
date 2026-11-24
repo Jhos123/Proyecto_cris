@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pendiente, Ecuación de una Recta y Perpendicularidad - Matemática I</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body);"></script>
+<style>
+  :root {
+    --primary: #003366;
+    --secondary: #00796B;
+    --accent: #D84315;
+    --bg-light: #F5F7FA;
+    --bg-green: #E0F2F1;
+    --bg-orange: #FBE9E7;
+    --text-dark: #2C3E50;
+    --text-gray: #5D6D7E;
+    --border: #E0E6ED;
+    --shadow: rgba(0, 0, 0, 0.08);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+    color: var(--text-dark);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .expo-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px var(--shadow);
+    overflow: hidden;
+  }
+
+  /* HEADER */
+  .expo-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #0052cc 100%);
+    color: white;
+    padding: 30px 40px;
+    border-bottom: 4px solid var(--secondary);
+  }
+
+  .expo-header .universidad {
+    font-size: 0.95em;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .expo-header h1 {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .expo-header .subtitulo {
+    font-size: 1.05em;
+    opacity: 0.95;
+    font-weight: 300;
+  }
+
+  /* NAVEGACIÓN SUPERIOR */
+  .nav-bar {
+    background: var(--bg-light);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .paso-contador {
+    font-size: 0.95em;
+    color: var(--text-gray);
+    font-weight: 600;
+  }
+
+  .paso-contador span {
+    color: var(--primary);
+    font-size: 1.1em;
+  }
+
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .nav-btn {
+    background: white;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .nav-btn.siguiente {
+    background: var(--primary);
+    color: white;
+  }
+
+  .nav-btn.siguiente:hover:not(:disabled) {
+    background: #002244;
+  }
+
+  /* CONTENIDO */
+  .expo-content {
+    padding: 40px;
+    min-height: 500px;
+  }
+
+  .paso {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .paso.activo {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .paso h2 {
+    color: var(--primary);
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary);
+  }
+
+  .paso h3 {
+    color: var(--secondary);
+    font-size: 1.25em;
+    margin: 20px 0 12px 0;
+    font-weight: 600;
+  }
+
+  .paso p {
+    margin-bottom: 15px;
+    font-size: 1.05em;
+  }
+
+  .paso strong {
+    color: var(--primary);
+  }
+
+  /* CAJAS DE CONTENIDO */
+  .caja-enunciado {
+    background: var(--bg-light);
+    padding: 24px 28px;
+    border-radius: 8px;
+    border-left: 5px solid var(--primary);
+    margin: 20px 0;
+    text-wrap: pretty;
+  }
+
+  .caja-enunciado p:last-child {
+    margin-bottom: 0;
+  }
+
+  .caja-enunciado p {
+    margin-bottom: 12px;
+  }
+
+  .caja-datos {
+    background: var(--bg-green);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary);
+    margin: 15px 0;
+  }
+
+  .caja-datos ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .caja-datos li {
+    padding: 6px 0 6px 30px;
+    position: relative;
+  }
+
+  .caja-datos li:before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--secondary);
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+
+  .caja-marco {
+    background: #FFF8E1;
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 5px solid #F9A825;
+    margin: 20px 0;
+  }
+
+  .caja-marco h3 {
+    color: #F57F17;
+    margin-top: 0;
+  }
+
+  .caja-marco ul, .caja-marco ol {
+    margin: 10px 0 10px 25px;
+  }
+
+  .caja-marco li {
+    margin-bottom: 8px;
+  }
+
+  /* TABLAS */
+  .tabla-datos {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  .tabla-datos th {
+    background: var(--primary);
+    color: white;
+    padding: 12px 15px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .tabla-datos td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tabla-datos tr:nth-child(even) {
+    background: var(--bg-light);
+  }
+
+  .tabla-datos tr.fila-total {
+    background: var(--bg-green);
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  /* ECUACIONES */
+  .ecuacion {
+    background: var(--bg-light);
+    padding: 18px;
+    border-radius: 8px;
+    margin: 18px 0;
+    text-align: center;
+    font-size: 1.15em;
+    border: 1px solid var(--border);
+  }
+
+  .resultado-box {
+    background: var(--secondary);
+    color: white;
+    padding: 18px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.15em;
+    font-weight: 600;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+  }
+
+  .resultado-box .katex {
+    color: white;
+  }
+
+  /* GRÁFICO */
+  .grafico-container {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .grafico-container svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* INTERPRETACIÓN */
+  .caja-interpreta {
+    background: var(--bg-orange);
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 5px solid var(--accent);
+    margin: 20px 0;
+  }
+
+  .caja-interpreta h3 {
+    color: var(--accent);
+    margin-top: 0;
+  }
+
+  .caja-interpreta ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+  }
+
+  .caja-interpreta li {
+    padding: 10px 0 10px 30px;
+    position: relative;
+    font-size: 1.02em;
+  }
+
+  .caja-interpreta li:before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+
+  .caja-interpreta strong {
+    color: var(--accent);
+  }
+
+  /* BARRA DE PROGRESO */
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary), var(--primary));
+    transition: width 0.4s ease;
+  }
+
+  @media (max-width: 768px) {
+    .expo-header {
+      padding: 25px 20px;
+    }
+
+    .expo-header h1 {
+      font-size: 1.4em;
+    }
+
+    .expo-content {
+      padding: 25px 20px;
+    }
+
+    .nav-bar {
+      padding: 12px 20px;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="expo-container">
+
+  <!-- HEADER -->
+  <div class="expo-header">
+    <div class="universidad">Universidad San Ignacio de Loyola · Matemática I · 2026-II</div>
+    <h1>Pendiente, Ecuación de una Recta y Perpendicularidad</h1>
+    <div class="subtitulo">Diseño de Guías y Señales Rectilíneas en un Centro de Convenciones</div>
+  </div>
+
+  <!-- BARRA DE PROGRESO -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 10%"></div>
+  </div>
+
+  <!-- NAVEGACIÓN -->
+  <div class="nav-bar">
+    <div class="paso-contador">Paso <span id="pasoActual">1</span> de <span id="totalPasos">10</span></div>
+    <div class="nav-buttons">
+      <button class="nav-btn anterior" id="btnAnterior" onclick="cambiarPaso(-1)" disabled>◀ Anterior</button>
+      <button class="nav-btn siguiente" id="btnSiguiente" onclick="cambiarPaso(1)">Siguiente ▶</button>
+    </div>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="expo-content">
+
+    <!-- PASO 1: MARCO TEÓRICO -->
+    <div class="paso activo" id="paso1">
+      <h2>Paso 1 · Marco Teórico</h2>
+
+      <div class="caja-marco">
+        <h3>Conceptos Fundamentales de la Recta en el Plano</h3>
+        <p>En geometría analítica, la recta permite modelar trayectorias lineales, alineaciones y cruces en un plano cartesiano:</p>
+        <ul>
+          <li><strong>Pendiente de una recta (\(m\)):</strong> Indica cuánto cambia \(y\) cuando \(x\) aumenta en una unidad. Si una recta no vertical pasa por \(A(x_1, y_1)\) y \(B(x_2, y_2)\), su pendiente se calcula como:
+            <div class="ecuacion">\(m = \dfrac{y_2 - y_1}{x_2 - x_1}\)</div>
+          </li>
+          <li><strong>Ecuación punto-pendiente:</strong> Conocida la pendiente \(m\) y un punto de paso \((x_1, y_1)\), la recta se expresa mediante:
+            <div class="ecuacion">\(y - y_1 = m(x - x_1)\)</div>
+          </li>
+          <li><strong>Forma pendiente-ordenada al origen:</strong> Al despejar \(y\), se obtiene la forma explícita:
+            <div class="ecuacion">\(y = mx + b\)</div>
+            donde \(m\) es la pendiente y \(b\) es el corte con el eje \(Y\) en \((0, b)\).
+          </li>
+          <li><strong>Perpendicularidad entre rectas:</strong> Si ninguna de dos rectas perpendiculares (\(L_1 \perp L_2\)) es vertical, el producto de sus pendientes es \(-1\):
+            <div class="ecuacion">\(m_1 \cdot m_2 = -1 \quad \Longleftrightarrow \quad m_2 = -\frac{1}{m_1}\)</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="caja-datos">
+        <p style="margin-bottom: 8px; font-weight: 600; color: var(--primary);">Interpretación del signo de la pendiente:</p>
+        <ul>
+          <li><strong>Pendiente positiva (\(m &gt; 0\)):</strong> La recta es creciente; sube de izquierda a derecha.</li>
+          <li><strong>Pendiente negativa (\(m &lt; 0\)):</strong> La recta es decreciente; baja de izquierda a derecha.</li>
+          <li><strong>Pendiente nula (\(m = 0\)):</strong> La recta es horizontal; \(y\) permanece constante.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PASO 2: MÉTODO DE RESOLUCIÓN -->
+    <div class="paso" id="paso2">
+      <h2>Paso 2 · Método de Resolución</h2>
+
+      <p>Para resolver problemas de pendiente, ecuación de la recta y perpendicularidad de forma ordenada, seguimos este procedimiento:</p>
+
+      <div class="caja-marco">
+        <h3>Pasos ordenados de resolución</h3>
+        <ol>
+          <li><strong>Hallar \(m_1\):</strong> Identificar dos puntos de paso de \(L_1\) y aplicar \(m_1 = \dfrac{y_2 - y_1}{x_2 - x_1}\).</li>
+          <li><strong>Interpretar el signo de \(m_1\):</strong> Determinar si la recta sube o baja de izquierda a derecha y cuál es su razón de cambio.</li>
+          <li><strong>Hallar la ecuación de \(L_1\):</strong> Sustituir \(m_1\) y un punto de paso en \(y - y_1 = m_1(x - x_1)\), luego despejar \(y\) para escribirla como \(y = mx + b\).</li>
+          <li><strong>Hallar \(m_2\) y la ecuación de \(L_2\):</strong> Aplicar \(m_1 \cdot m_2 = -1\) para obtener \(m_2\), y usar el punto dado \(P(x_0, y_0)\) en \(y - y_0 = m_2(x - x_0)\).</li>
+          <li><strong>Justificar la perpendicularidad:</strong> Verificar analíticamente que \(m_1 \cdot m_2 = -1\) (sin rectas verticales) y representar ambas rectas en el plano.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- PASO 3: ENUNCIADO E INCISOS -->
+    <div class="paso" id="paso3">
+      <h2>Paso 3 · Enunciado e Incisos</h2>
+
+      <div class="caja-enunciado">
+        <p>En el plano de un centro de convenciones, una guía de desplazamiento sigue la recta <strong>\(L_1\)</strong> que pasa por <strong>\(A(-4, -2)\)</strong> y <strong>\(B(2, 1)\)</strong>.</p>
+        <p>Desde <strong>\(P(1, 4)\)</strong> se traza una señal rectilínea <strong>\(L_2\)</strong> perpendicular a <strong>\(L_1\)</strong>.</p>
+      </div>
+
+      <h3>Incisos solicitados:</h3>
+      <div class="caja-datos">
+        <ul>
+          <li><strong>a)</strong> Calcule la pendiente de \(L_1\) e interprete el significado de su signo.</li>
+          <li><strong>b)</strong> Determine la ecuación de \(L_1\) en la forma \(y = mx + b\).</li>
+          <li><strong>c)</strong> Determine la ecuación de \(L_2\), represente gráficamente ambas rectas y justifique la perpendicularidad.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PASO 4: INCISO A - CÁLCULO DE m1 E INTERPRETACIÓN -->
+    <div class="paso" id="paso4">
+      <h2>Paso 4 · Inciso a: Pendiente de \(L_1\) e interpretación del signo</h2>
+
+      <p>Tomamos los puntos de paso de la guía \(L_1\): \(A(x_1, y_1) = (-4, -2)\) y \(B(x_2, y_2) = (2, 1)\).</p>
+
+      <div class="ecuacion">
+        \[
+          m_1 = \frac{y_2 - y_1}{x_2 - x_1} = \frac{1 - (-2)}{2 - (-4)} = \frac{1 + 2}{2 + 4} = \frac{3}{6} = \frac{1}{2}
+        \]
+      </div>
+
+      <table class="tabla-datos">
+        <thead>
+          <tr>
+            <th>Variación en \(y\) (\(\Delta y\))</th>
+            <th>Variación en \(x\) (\(\Delta x\))</th>
+            <th>Pendiente \(m_1 = \frac{\Delta y}{\Delta x}\)</th>
+            <th>Signo y Comportamiento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>\(1 - (-2) = +3\)</td>
+            <td>\(2 - (-4) = +6\)</td>
+            <td><strong>\(\dfrac{3}{6} = \dfrac{1}{2}\)</strong></td>
+            <td class="fila-total">\(m_1 = \frac{1}{2} &gt; 0\) (Sube de izquierda a derecha)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="caja-datos">
+        <ul>
+          <li><strong>Interpretación del signo:</strong> Como \(m_1 = \dfrac{1}{2} &gt; 0\), la pendiente es <strong>positiva</strong>; por ello, la guía \(L_1\) <strong>sube de izquierda a derecha</strong>, elevándose \(1\) unidad en \(y\) por cada \(2\) unidades que avanza en \(x\) (o \(0.5\) unidades por cada unidad de \(x\)).</li>
+        </ul>
+      </div>
+
+      <div class="resultado-box">
+        Pendiente de \(L_1\): \(m_1 = \frac{1}{2}\) (positiva, la recta sube de izquierda a derecha).
+      </div>
+    </div>
+
+    <!-- PASO 5: INCISO B - ECUACIÓN DE L1 -->
+    <div class="paso" id="paso5">
+      <h2>Paso 5 · Inciso b: Ecuación de \(L_1\) en la forma \(y = mx + b\)</h2>
+
+      <p>Aplicamos la ecuación punto-pendiente con \(m_1 = \dfrac{1}{2}\) y el punto \(A(-4, -2)\):</p>
+
+      <div class="ecuacion">
+        \[
+          \begin{aligned}
+            y - y_1 &= m_1(x - x_1) \\
+            y - (-2) &= \frac{1}{2}\big(x - (-4)\big) \\
+            y + 2 &= \frac{1}{2}(x + 4) \\
+            y + 2 &= \frac{1}{2}x + 2 \\
+            y &= \frac{1}{2}x + 2 - 2 \\
+            L_1:\; y &= \frac{1}{2}x
+          \end{aligned}
+        \]
+      </div>
+
+      <p>Verificamos que el segundo punto \(B(2, 1)\) también satisface la ecuación obtenida:</p>
+
+      <div class="ecuacion">
+        \[
+          \text{Para } x = 2:\quad y = \frac{1}{2}(2) = 1 \quad \Longrightarrow \quad \text{Coincide con } B(2, 1)
+        \]
+      </div>
+
+      <div class="resultado-box">
+        Ecuación de \(L_1\): \(y = \frac{1}{2}x\) &nbsp; (con \(m_1 = \frac{1}{2}\) y \(b_1 = 0\)).
+      </div>
+    </div>
+
+    <!-- PASO 6: INCISO C - PENDIENTE m2 Y ECUACIÓN DE L2 -->
+    <div class="paso" id="paso6">
+      <h2>Paso 6 · Inciso c: Pendiente perpendicular \(m_2\) y ecuación de \(L_2\)</h2>
+
+      <h3>1. Cálculo de la pendiente \(m_2\)</h3>
+      <p>Como la señal rectilínea \(L_2\) es perpendicular a \(L_1\) y ninguna es vertical, se cumple \(m_1 \cdot m_2 = -1\):</p>
+
+      <div class="ecuacion">
+        \[
+          m_1 \cdot m_2 = -1 \quad \Longrightarrow \quad \left(\frac{1}{2}\right) \cdot m_2 = -1 \quad \Longrightarrow \quad m_2 = -2
+        \]
+      </div>
+
+      <h3>2. Determinación de la ecuación de \(L_2\)</h3>
+      <p>Usamos \(m_2 = -2\) y el punto de partida \(P(1, 4)\) en la forma punto-pendiente:</p>
+
+      <div class="ecuacion">
+        \[
+          \begin{aligned}
+            y - y_0 &= m_2(x - x_0) \\
+            y - 4 &= -2(x - 1) \\
+            y - 4 &= -2x + 2 \\
+            y &= -2x + 2 + 4 \\
+            L_2:\; y &= -2x + 6
+          \end{aligned}
+        \]
+      </div>
+
+      <div class="resultado-box">
+        Pendiente de \(L_2\): \(m_2 = -2\) &nbsp;·&nbsp; Ecuación de \(L_2\): \(y = -2x + 6\).
+      </div>
+    </div>
+
+    <!-- PASO 7: GRÁFICA DE L1 Y L2 EN EL PLANO CARTESIANO -->
+    <div class="paso" id="paso7">
+      <h2>Paso 7 · Representación Gráfica de \(L_1\) y \(L_2\)</h2>
+
+      <p>Representamos ambas rectas en el plano cartesiano junto con los puntos \(A(-4,-2)\), \(B(2,1)\), \(P(1,4)\), el punto de intersección \(I\left(\frac{12}{5}, \frac{6}{5}\right) = (2.4, 1.2)\) y el ángulo recto de \(90^\circ\):</p>
+
+      <div class="grafico-container">
+        <!-- Escala: 1 unidad = 45 px; Origen O = (370, 320); x in [-7, 9], y in [-4, 8] -->
+        <svg viewBox="0 0 920 620" xmlns="http://www.w3.org/2000/svg">
+          <rect width="920" height="620" fill="#fafafa"/>
+          <text x="460" y="34" font-size="18.5" font-weight="bold" fill="#003366" text-anchor="middle">
+            Representación Gráfica: Guía L₁ y Señal Perpendicular L₂
+          </text>
+
+          <!-- Cuadrícula unidad a unidad (cada 45 px) -->
+          <g stroke="#e5e9f0" stroke-width="1">
+            <!-- Verticales: x de -7 a 9 -> px de 55 a 775 -->
+            <line x1="55" y1="55" x2="55" y2="545"/>
+            <line x1="100" y1="55" x2="100" y2="545"/>
+            <line x1="145" y1="55" x2="145" y2="545"/>
+            <line x1="190" y1="55" x2="190" y2="545"/>
+            <line x1="235" y1="55" x2="235" y2="545"/>
+            <line x1="280" y1="55" x2="280" y2="545"/>
+            <line x1="325" y1="55" x2="325" y2="545"/>
+            <line x1="415" y1="55" x2="415" y2="545"/>
+            <line x1="460" y1="55" x2="460" y2="545"/>
+            <line x1="505" y1="55" x2="505" y2="545"/>
+            <line x1="550" y1="55" x2="550" y2="545"/>
+            <line x1="595" y1="55" x2="595" y2="545"/>
+            <line x1="640" y1="55" x2="640" y2="545"/>
+            <line x1="685" y1="55" x2="685" y2="545"/>
+            <line x1="730" y1="55" x2="730" y2="545"/>
+            <line x1="775" y1="55" x2="775" y2="545"/>
+
+            <!-- Horizontales: y de -4 a 8 -> py de 500 a -40 (visible de 55 a 545) -->
+            <line x1="55" y1="500" x2="775" y2="500"/>
+            <line x1="55" y1="455" x2="775" y2="455"/>
+            <line x1="55" y1="410" x2="775" y2="410"/>
+            <line x1="55" y1="365" x2="775" y2="365"/>
+            <line x1="55" y1="275" x2="775" y2="275"/>
+            <line x1="55" y1="230" x2="775" y2="230"/>
+            <line x1="55" y1="185" x2="775" y2="185"/>
+            <line x1="55" y1="140" x2="775" y2="140"/>
+            <line x1="55" y1="95" x2="775" y2="95"/>
+          </g>
+
+          <!-- Ejes coordenados: Eje X en py = 320, Eje Y en px = 370 -->
+          <line x1="45" y1="320" x2="795" y2="320" stroke="#37474F" stroke-width="2.3"/>
+          <line x1="370" y1="555" x2="370" y2="50" stroke="#37474F" stroke-width="2.3"/>
+          <polygon points="795,320 784,315 784,325" fill="#37474F"/>
+          <polygon points="370,50 365,61 375,61" fill="#37474F"/>
+          <text x="792" y="342" font-size="14" font-weight="bold" fill="#37474F">x</text>
+          <text x="382" y="60" font-size="14" font-weight="bold" fill="#37474F">y</text>
+
+          <!-- Marcas numéricas en Eje X -->
+          <text x="190" y="336" font-size="11.5" fill="#5D6D7E" text-anchor="middle">-4</text>
+          <text x="280" y="336" font-size="11.5" fill="#5D6D7E" text-anchor="middle">-2</text>
+          <text x="358" y="335" font-size="11.5" font-weight="bold" fill="#37474F" text-anchor="end">0</text>
+          <text x="415" y="336" font-size="11.5" fill="#5D6D7E" text-anchor="middle">1</text>
+          <text x="460" y="336" font-size="11.5" fill="#5D6D7E" text-anchor="middle">2</text>
+          <text x="550" y="336" font-size="11.5" fill="#5D6D7E" text-anchor="middle">4</text>
+          <text x="640" y="336" font-size="11.5" fill="#5D6D7E" text-anchor="middle">6</text>
+
+          <!-- Marcas numéricas en Eje Y -->
+          <text x="362" y="414" font-size="11.5" fill="#5D6D7E" text-anchor="end">-2</text>
+          <text x="362" y="279" font-size="11.5" fill="#5D6D7E" text-anchor="end">1</text>
+          <text x="362" y="234" font-size="11.5" fill="#5D6D7E" text-anchor="end">2</text>
+          <text x="362" y="144" font-size="11.5" fill="#5D6D7E" text-anchor="end">4</text>
+          <text x="362" y="54" font-size="11.5" fill="#5D6D7E" text-anchor="end">6</text>
+
+          <!-- Recta L1: y = 0.5x -> desde x = -6 (100, 455) hasta x = 8 (730, 140) -->
+          <line x1="100" y1="455" x2="730" y2="140" stroke="#003366" stroke-width="3.2"/>
+
+          <!-- Recta L2: y = -2x + 6 -> desde x = -0.25 (358.75, 55) hasta x = 2.75 (493.75, 545) -->
+          <line x1="358.75" y1="55" x2="493.75" y2="545" stroke="#00796B" stroke-width="3.2"/>
+
+          <!-- Líneas punteadas de proyección para puntos clave -->
+          <line x1="190" y1="410" x2="190" y2="320" stroke="#003366" stroke-width="1.2" stroke-dasharray="4,4"/>
+          <line x1="190" y1="410" x2="370" y2="410" stroke="#003366" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+          <line x1="460" y1="275" x2="460" y2="320" stroke="#003366" stroke-width="1.2" stroke-dasharray="4,4"/>
+          <line x1="460" y1="275" x2="370" y2="275" stroke="#003366" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+          <line x1="415" y1="140" x2="415" y2="320" stroke="#00796B" stroke-width="1.2" stroke-dasharray="4,4"/>
+          <line x1="415" y1="140" x2="370" y2="140" stroke="#00796B" stroke-width="1.2" stroke-dasharray="4,4"/>
+
+          <!-- Ángulo recto de 90° en I(2.4, 1.2) -> px = 370 + 2.4*45 = 478, py = 320 - 1.2*45 = 266 -->
+          <!-- Vector unitario a lo largo de L1 hacia arriba-derecha: (2/sqrt(5), -1/sqrt(5)) * 12 -->
+          <!-- Vector unitario a lo largo de L2 hacia abajo-derecha: (1/sqrt(5), 2/sqrt(5)) * 12 -->
+          <polyline points="488.7,260.6 494.1,271.3 483.4,276.7" fill="rgba(216, 67, 21, 0.16)" stroke="#D84315" stroke-width="2"/>
+
+          <!-- Punto A(-4, -2) -> (190, 410) -->
+          <circle cx="190" cy="410" r="6.5" fill="#003366" stroke="white" stroke-width="2"/>
+          <rect x="115" y="422" width="118" height="24" fill="white" stroke="#003366" stroke-width="1" rx="4"/>
+          <text x="174" y="438" font-size="12" font-weight="bold" fill="#003366" text-anchor="middle">A(-4, -2)</text>
+
+          <!-- Punto B(2, 1) -> (460, 275) -->
+          <circle cx="460" cy="275" r="6.5" fill="#003366" stroke="white" stroke-width="2"/>
+          <rect x="472" y="256" width="84" height="24" fill="white" stroke="#003366" stroke-width="1" rx="4"/>
+          <text x="514" y="272" font-size="12" font-weight="bold" fill="#003366" text-anchor="middle">B(2, 1)</text>
+
+          <!-- Punto P(1, 4) -> (415, 140) -->
+          <circle cx="415" cy="140" r="6.5" fill="#00796B" stroke="white" stroke-width="2"/>
+          <rect x="427" y="122" width="86" height="24" fill="white" stroke="#00796B" stroke-width="1" rx="4"/>
+          <text x="470" y="138" font-size="12" font-weight="bold" fill="#00796B" text-anchor="middle">P(1, 4)</text>
+
+          <!-- Punto de intersección I(12/5, 6/5) = (2.4, 1.2) -> (478, 266) -->
+          <circle cx="478" cy="266" r="7" fill="#D84315" stroke="white" stroke-width="2"/>
+          <rect x="492" y="224" width="166" height="26" fill="white" stroke="#D84315" stroke-width="1.2" rx="4"/>
+          <text x="575" y="241" font-size="12" font-weight="bold" fill="#D84315" text-anchor="middle">I(12/5, 6/5) = (2.4, 1.2)</text>
+
+          <!-- Etiquetas de rectas -->
+          <rect x="578" y="178" width="132" height="26" fill="white" stroke="#003366" stroke-width="1.2" rx="4"/>
+          <text x="644" y="195" font-size="12.5" font-weight="bold" fill="#003366" text-anchor="middle">L₁: y = (1/2)x</text>
+
+          <rect x="210" y="102" width="142" height="26" fill="white" stroke="#00796B" stroke-width="1.2" rx="4"/>
+          <text x="281" y="119" font-size="12.5" font-weight="bold" fill="#00796B" text-anchor="middle">L₂: y = -2x + 6</text>
+
+          <!-- Leyenda -->
+          <rect x="615" y="370" width="285" height="175" fill="white" stroke="#e0e6ed" stroke-width="1.5" rx="8"/>
+          <text x="757" y="393" font-size="13.5" font-weight="bold" fill="#37474F" text-anchor="middle">Leyenda</text>
+
+          <line x1="630" y1="415" x2="665" y2="415" stroke="#003366" stroke-width="3.2"/>
+          <text x="675" y="420" font-size="12" fill="#37474F">L₁: y = (1/2)x (m₁ = 1/2)</text>
+
+          <line x1="630" y1="441" x2="665" y2="441" stroke="#00796B" stroke-width="3.2"/>
+          <text x="675" y="446" font-size="12" fill="#37474F">L₂: y = -2x + 6 (m₂ = -2)</text>
+
+          <circle cx="647" cy="467" r="5" fill="#003366"/>
+          <text x="675" y="472" font-size="12" fill="#37474F">Puntos A(-4,-2) y B(2,1)</text>
+
+          <circle cx="647" cy="493" r="5" fill="#00796B"/>
+          <text x="675" y="498" font-size="12" fill="#37474F">Punto de partida P(1,4)</text>
+
+          <circle cx="647" cy="519" r="5" fill="#D84315"/>
+          <text x="675" y="524" font-size="12" fill="#37474F">Cruce 90° en I(2.4, 1.2)</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- PASO 8: JUSTIFICACIÓN DE PERPENDICULARIDAD Y VERIFICACIÓN DE PUNTOS -->
+    <div class="paso" id="paso8">
+      <h2>Paso 8 · Justificación de Perpendicularidad y Verificación</h2>
+
+      <p>Justificamos analíticamente que \(L_1\) y \(L_2\) son perpendiculares verificando que ninguna es vertical y que el producto de sus pendientes es igual a \(-1\):</p>
+
+      <div class="ecuacion">
+        \[
+          m_1 \cdot m_2 = \left(\frac{1}{2}\right)(-2) = -\frac{2}{2} = -1
+        \]
+      </div>
+
+      <p>Comprobamos también que cada recta contiene los puntos correspondientes y que el punto de intersección \(I\left(\frac{12}{5}, \frac{6}{5}\right)\) pertenece a ambas:</p>
+
+      <table class="tabla-datos">
+        <thead>
+          <tr>
+            <th>Recta / Punto</th>
+            <th>Ecuación o Condición</th>
+            <th>Sustitución y Verificación</th>
+            <th>Resultado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>\(L_1\) en \(A(-4,-2)\)</strong></td>
+            <td>\(y = \frac{1}{2}x\)</td>
+            <td>\(\frac{1}{2}(-4) = -2\)</td>
+            <td>Cumple</td>
+          </tr>
+          <tr>
+            <td><strong>\(L_2\) en \(P(1,4)\)</strong></td>
+            <td>\(y = -2x + 6\)</td>
+            <td>\(-2(1) + 6 = 4\)</td>
+            <td>Cumple</td>
+          </tr>
+          <tr>
+            <td><strong>Intersección \(I(2.4, 1.2)\)</strong></td>
+            <td>\(\frac{1}{2}x = -2x + 6\)</td>
+            <td>\(\frac{5}{2}x = 6 \implies x = \frac{12}{5},\; y = \frac{6}{5}\)</td>
+            <td>Cumple en \(L_1\) y \(L_2\)</td>
+          </tr>
+          <tr class="fila-total">
+            <td><strong>Perpendicularidad</strong></td>
+            <td>\(m_1 \cdot m_2 = -1\)</td>
+            <td>\(\left(\frac{1}{2}\right)(-2) = -1\)</td>
+            <td>\(L_1 \perp L_2\) (\(90^\circ\))</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="resultado-box">
+        Justificación: Como \(m_1 \cdot m_2 = \left(\frac{1}{2}\right)(-2) = -1\), \(L_1\) y \(L_2\) son perpendiculares.
+      </div>
+    </div>
+
+    <!-- PASO 9: INTERPRETACIÓN PRÁCTICA EN EL CENTRO DE CONVENCIONES -->
+    <div class="paso" id="paso9">
+      <h2>Paso 9 · Interpretación Práctica en el Plano</h2>
+
+      <div class="caja-interpreta">
+        <h3>Significado en el centro de convenciones</h3>
+        <ul>
+          <li><strong>Guía principal \(L_1: y = \frac{1}{2}x\):</strong> Su pendiente positiva \(m_1 = \frac{1}{2}\) indica un desplazamiento ascendente y progresivo desde \(A(-4,-2)\) hacia \(B(2,1)\), pasando por el origen \((0,0)\) del plano.</li>
+          <li><strong>Señal perpendicular \(L_2: y = -2x + 6\):</strong> Su pendiente negativa \(m_2 = -2\) indica una dirección descendente desde la estación o referencia \(P(1,4)\), cortando al eje \(Y\) en \((0,6)\) y al eje \(X\) en \((3,0)\).</li>
+          <li><strong>Cruce ortogonal en \(I(2.4, 1.2)\):</strong> El trazado perpendicular garantiza que la señal \(L_2\) intercepta a la guía \(L_1\) formando un ángulo recto (\(90^\circ\)), lo que facilita una orientación clara y directa en el recinto.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PASO 10: CONCLUSIÓN Y RESUMEN FINAL -->
+    <div class="paso" id="paso10">
+      <h2>Paso 10 · Conclusión y Resumen Final</h2>
+
+      <div class="caja-enunciado">
+        <p>A partir de los puntos \(A(-4,-2)\) y \(B(2,1)\) se determinó la pendiente \(m_1 = \frac{1}{2}\) y la ecuación explícita de la guía \(L_1: y = \frac{1}{2}x\).</p>
+        <p>Imponiendo la condición de perpendicularidad \(m_1 \cdot m_2 = -1\), se obtuvo \(m_2 = -2\) y la ecuación de la señal \(L_2: y = -2x + 6\) que pasa por \(P(1,4)\), verificando el ángulo de \(90^\circ\) en su intersección.</p>
+      </div>
+
+      <div class="resultado-box" style="background: var(--primary);">
+        ✅ Resumen: \(m_1 = \frac{1}{2}\) · \(L_1: y = \frac{1}{2}x\) · \(m_2 = -2\) · \(L_2: y = -2x + 6\) · \(m_1 \cdot m_2 = -1\) (\(L_1 \perp L_2\)).
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let pasoActual = 1;
+  const totalPasos = 10;
+
+  function cambiarPaso(direccion) {
+    const nuevoPaso = pasoActual + direccion;
+
+    if (nuevoPaso < 1 || nuevoPaso > totalPasos) return;
+
+    // Ocultar paso actual
+    document.getElementById('paso' + pasoActual).classList.remove('activo');
+
+    // Mostrar nuevo paso
+    pasoActual = nuevoPaso;
+    document.getElementById('paso' + pasoActual).classList.add('activo');
+
+    // Actualizar contador
+    document.getElementById('pasoActual').textContent = pasoActual;
+
+    // Actualizar barra de progreso
+    const progreso = (pasoActual / totalPasos) * 100;
+    document.getElementById('progressFill').style.width = progreso + '%';
+
+    // Actualizar botones
+    document.getElementById('btnAnterior').disabled = (pasoActual === 1);
+
+    const btnSiguiente = document.getElementById('btnSiguiente');
+    if (pasoActual === totalPasos) {
+      btnSiguiente.textContent = 'Finalizar ✓';
+      btnSiguiente.disabled = true;
+      btnSiguiente.style.opacity = '0.5';
+    } else {
+      btnSiguiente.textContent = 'Siguiente ▶';
+      btnSiguiente.disabled = false;
+      btnSiguiente.style.opacity = '1';
+    }
+
+    // Renderizar KaTeX en el nuevo paso
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.getElementById('paso' + pasoActual));
+    }
+
+    // Scroll al inicio del contenido
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Render inicial
+  window.addEventListener('load', () => {
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.body);
+    }
+  });
+</script>
+
+</body>
+</html>

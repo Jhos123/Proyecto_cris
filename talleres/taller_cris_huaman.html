@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistemas de Inecuaciones y Región Factible - Matemática I</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body);"></script>
+<style>
+  :root {
+    --primary: #003366;
+    --secondary: #00796B;
+    --accent: #D84315;
+    --bg-light: #F5F7FA;
+    --bg-green: #E0F2F1;
+    --bg-orange: #FBE9E7;
+    --text-dark: #2C3E50;
+    --text-gray: #5D6D7E;
+    --border: #E0E6ED;
+    --shadow: rgba(0, 0, 0, 0.08);
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+    color: var(--text-dark);
+    line-height: 1.7;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  .expo-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px var(--shadow);
+    overflow: hidden;
+  }
+  
+  /* HEADER */
+  .expo-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #0052cc 100%);
+    color: white;
+    padding: 30px 40px;
+    border-bottom: 4px solid var(--secondary);
+  }
+  
+  .expo-header .universidad {
+    font-size: 0.95em;
+    opacity: 0.9;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  
+  .expo-header h1 {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+  
+  .expo-header .subtitulo {
+    font-size: 1.05em;
+    opacity: 0.95;
+    font-weight: 300;
+  }
+  
+  /* NAVEGACIÓN SUPERIOR */
+  .nav-bar {
+    background: var(--bg-light);
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .paso-contador {
+    font-size: 0.95em;
+    color: var(--text-gray);
+    font-weight: 600;
+  }
+  
+  .paso-contador span {
+    color: var(--primary);
+    font-size: 1.1em;
+  }
+  
+  .nav-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .nav-btn {
+    background: white;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  
+  .nav-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+  }
+  
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  
+  .nav-btn.siguiente {
+    background: var(--primary);
+    color: white;
+  }
+  
+  .nav-btn.siguiente:hover:not(:disabled) {
+    background: #002244;
+  }
+  
+  /* CONTENIDO */
+  .expo-content {
+    padding: 40px;
+    min-height: 500px;
+  }
+  
+  .paso {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  
+  .paso.activo {
+    display: block;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .paso h2 {
+    color: var(--primary);
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary);
+  }
+  
+  .paso h3 {
+    color: var(--secondary);
+    font-size: 1.25em;
+    margin: 20px 0 12px 0;
+    font-weight: 600;
+  }
+  
+  .paso p {
+    margin-bottom: 15px;
+    font-size: 1.05em;
+  }
+  
+  .paso strong {
+    color: var(--primary);
+  }
+  
+  /* CAJAS DE CONTENIDO */
+  .caja-enunciado {
+    background: var(--bg-light);
+    padding: 24px 28px;
+    border-radius: 8px;
+    border-left: 5px solid var(--primary);
+    margin: 20px 0;
+    text-wrap: pretty;
+  }
+
+  .caja-enunciado p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .caja-enunciado p {
+    margin-bottom: 12px;
+  }
+  
+  .caja-datos {
+    background: var(--bg-green);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary);
+    margin: 15px 0;
+  }
+  
+  .caja-datos ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .caja-datos li {
+    padding: 6px 0 6px 30px;
+    position: relative;
+  }
+  
+  .caja-datos li:before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--secondary);
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+  
+  .caja-marco {
+    background: #FFF8E1;
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 5px solid #F9A825;
+    margin: 20px 0;
+  }
+  
+  .caja-marco h3 {
+    color: #F57F17;
+    margin-top: 0;
+  }
+  
+  .caja-marco ul, .caja-marco ol {
+    margin: 10px 0 10px 25px;
+  }
+  
+  .caja-marco li {
+    margin-bottom: 8px;
+  }
+
+  /* TABLAS */
+  .tabla-datos {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+
+  .tabla-datos th {
+    background: var(--primary);
+    color: white;
+    padding: 12px 15px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .tabla-datos td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tabla-datos tr:nth-child(even) {
+    background: var(--bg-light);
+  }
+
+  .tabla-datos tr.fila-total {
+    background: var(--bg-green);
+    font-weight: 700;
+    color: var(--primary);
+  }
+  
+  /* ECUACIONES */
+  .ecuacion {
+    background: var(--bg-light);
+    padding: 18px;
+    border-radius: 8px;
+    margin: 18px 0;
+    text-align: center;
+    font-size: 1.15em;
+    border: 1px solid var(--border);
+  }
+  
+  .resultado-box {
+    background: var(--secondary);
+    color: white;
+    padding: 18px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.15em;
+    font-weight: 600;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+  }
+  
+  .resultado-box .katex {
+    color: white;
+  }
+  
+  /* GRÁFICO */
+  .grafico-container {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  .grafico-container svg {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* INTERPRETACIÓN */
+  .caja-interpreta {
+    background: var(--bg-orange);
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 5px solid var(--accent);
+    margin: 20px 0;
+  }
+  
+  .caja-interpreta h3 {
+    color: var(--accent);
+    margin-top: 0;
+  }
+  
+  .caja-interpreta ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+  }
+  
+  .caja-interpreta li {
+    padding: 10px 0 10px 30px;
+    position: relative;
+    font-size: 1.02em;
+  }
+  
+  .caja-interpreta li:before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  
+  .caja-interpreta strong {
+    color: var(--accent);
+  }
+  
+  /* BARRA DE PROGRESO */
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    position: relative;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary), var(--primary));
+    transition: width 0.4s ease;
+  }
+  
+  @media (max-width: 768px) {
+    .expo-header {
+      padding: 25px 20px;
+    }
+    
+    .expo-header h1 {
+      font-size: 1.4em;
+    }
+    
+    .expo-content {
+      padding: 25px 20px;
+    }
+    
+    .nav-bar {
+      padding: 12px 20px;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="expo-container">
+  
+  <!-- HEADER -->
+  <div class="expo-header">
+    <div class="universidad">Universidad San Ignacio de Loyola · Matemática I · 2026-II</div>
+    <h1>Sistemas de Inecuaciones y Región Factible</h1>
+    <div class="subtitulo">Optimización de Recursos en un Centro de Entrenamiento</div>
+  </div>
+  
+  <!-- BARRA DE PROGRESO -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width: 9.09%"></div>
+  </div>
+  
+  <!-- NAVEGACIÓN -->
+  <div class="nav-bar">
+    <div class="paso-contador">Paso <span id="pasoActual">1</span> de <span id="totalPasos">11</span></div>
+    <div class="nav-buttons">
+      <button class="nav-btn anterior" id="btnAnterior" onclick="cambiarPaso(-1)" disabled>◀ Anterior</button>
+      <button class="nav-btn siguiente" id="btnSiguiente" onclick="cambiarPaso(1)">Siguiente ▶</button>
+    </div>
+  </div>
+  
+  <!-- CONTENIDO -->
+  <div class="expo-content">
+    
+    <!-- PASO 1: MARCO TEÓRICO (CONCEPTOS FUNDAMENTALES) -->
+    <div class="paso activo" id="paso1">
+      <h2>Marco Teórico · Conceptos Fundamentales</h2>
+      
+      <div class="caja-marco">
+        <h3>Sistemas de Inecuaciones Lineales</h3>
+        <p>Cuando se realizan dos actividades (\(x\) e \(y\)) que emplean recursos limitados (horas de cancha, salas o equipos), el consumo total no puede superar la disponibilidad máxima \(c\):</p>
+        <div class="ecuacion">
+          \(ax + by \le c \quad \text{con} \quad x \ge 0,\; y \ge 0\)
+        </div>
+        <ul>
+          <li><strong>Región factible y vértices:</strong> Una combinación \((x,y)\) es posible si cumple todas las restricciones simultáneamente. El conjunto de todas esas combinaciones forma la <strong>región factible</strong>, y las esquinas que delimitan este polígono se denominan <strong>vértices</strong>.</li>
+          <li><strong>Punto de prueba:</strong> Para verificar si un plan propuesto \(Q(x_0, y_0)\) es factible, basta sustituir sus coordenadas en cada inecuación del sistema; no es necesario que el plan se ubique en un vértice.</li>
+        </ul>
+      </div>
+
+      <div class="caja-datos">
+        <p style="margin-bottom: 8px; font-weight: 600; color: var(--primary);">Restricciones Importantes:</p>
+        <ul>
+          <li><strong>No negatividad:</strong> Las cantidades de actividades organizadas nunca pueden ser negativas (\(x \ge 0\), \(y \ge 0\)), por lo que la solución se ubica en el primer cuadrante.</li>
+          <li><strong>Uso de recursos:</strong> Cada recurso limitado genera una desigualdad independiente de tipo \(\le\).</li>
+          <li><strong>Naturaleza discreta:</strong> Cuando las actividades representan eventos o sesiones completas, los valores válidos deben ser números enteros.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- PASO 2: MARCO TEÓRICO (MÉTODO DE RESOLUCIÓN) -->
+    <div class="paso" id="paso2">
+      <h2>Marco Teórico · Método de Resolución</h2>
+      
+      <p>Para resolver gráficamente un sistema de inecuaciones lineales y analizar un plan propuesto, seguimos seis pasos ordenados:</p>
+      
+      <div class="caja-marco">
+        <h3>Procedimiento paso a paso</h3>
+        <ol>
+          <li><strong>Definir variables:</strong> Identificar las incógnitas \(x\) e \(y\) que representan las cantidades de cada actividad.</li>
+          <li><strong>Formular restricciones:</strong> Plantear una inecuación lineal por cada recurso disponible e incluir \(x \ge 0, y \ge 0\).</li>
+          <li><strong>Trazar rectas frontera:</strong> Reemplazar \(\le\) por \(=\) y hallar los interceptos con los ejes \((0, y)\) y \((x, 0)\).</li>
+          <li><strong>Sombrear la región factible:</strong> Evaluar el punto de prueba \((0,0)\) para identificar el semiplano común en el primer cuadrante.</li>
+          <li><strong>Determinar los vértices:</strong> Calcular las intersecciones entre las rectas frontera mediante reducción o sustitución.</li>
+          <li><strong>Evaluar el punto de prueba:</strong> Sustituir el plan \(Q(x_0, y_0)\) en todas las desigualdades para comprobar su factibilidad.</li>
+        </ol>
+      </div>
+    </div>
+    
+    <!-- PASO 3: ENUNCIADO -->
+    <div class="paso" id="paso3">
+      <h2>Enunciado del Problema</h2>
+      
+      <div class="caja-enunciado">
+        <p style="font-size: 1.01em;">Un centro de entrenamiento organiza <strong>clínicas técnicas \((x)\)</strong> y <strong>sesiones de acondicionamiento físico \((y)\)</strong>.</p>
+        <p>Cada clínica técnica requiere <strong>2 horas de cancha</strong> y <strong>1 hora de evaluación</strong>; cada sesión de acondicionamiento físico requiere <strong>1 hora de cancha</strong> y <strong>2 horas de evaluación</strong>.</p>
+        <p>Se dispone como máximo de <strong>12 horas de cancha</strong> y <strong>9 horas de evaluación</strong>. Las cantidades son enteras no negativas.</p>
+      </div>
+      
+      <h3>Se pide:</h3>
+      <div class="caja-datos">
+        <ul>
+          <li><strong>a)</strong> Formule el sistema de inecuaciones.</li>
+          <li><strong>b)</strong> Grafique las rectas frontera, sombree la región factible y determine sus vértices.</li>
+          <li><strong>c)</strong> El plan propuesto se representa mediante \(Q(3,2)\). Determine si es factible y justifique.</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- PASO 4: INCISO A - VARIABLES Y TABLA -->
+    <div class="paso" id="paso4">
+      <h2>Inciso a: Definir variables y organizar datos</h2>
+      
+      <p>Definimos las variables de decisión del problema:</p>
+      <div class="caja-datos">
+        <ul>
+          <li><strong>\(x\):</strong> número de clínicas técnicas a organizar.</li>
+          <li><strong>\(y\):</strong> número de sesiones de acondicionamiento físico a organizar.</li>
+        </ul>
+      </div>
+
+      <p>Organizamos los requerimientos por actividad y la disponibilidad máxima en una tabla de recursos:</p>
+
+      <table class="tabla-datos">
+        <thead>
+          <tr>
+            <th>Actividad</th>
+            <th>Cancha (horas)</th>
+            <th>Evaluación (horas)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Clínica técnica \((x)\)</strong></td>
+            <td>\(2x\)</td>
+            <td>\(1x\)</td>
+          </tr>
+          <tr>
+            <td><strong>Acondicionamiento físico \((y)\)</strong></td>
+            <td>\(1y\)</td>
+            <td>\(2y\)</td>
+          </tr>
+          <tr class="fila-total">
+            <td>Disponibilidad máxima (Total)</td>
+            <td>\(12\)</td>
+            <td>\(9\)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- PASO 5: INCISO A - SISTEMA FORMULADO -->
+    <div class="paso" id="paso5">
+      <h2>Inciso a: Formular el sistema de inecuaciones</h2>
+      
+      <p>Cada recurso consumido no debe superar el total disponible, y las cantidades no pueden ser negativas:</p>
+      
+      <div class="ecuacion">
+        \(\begin{cases} 2x + y \le 12 & \text{(restricción de horas de cancha)} \\ x + 2y \le 9 & \text{(restricción de horas de evaluación)} \\ x \ge 0,\; y \ge 0 & \text{(condición de no negatividad)} \end{cases}\)
+      </div>
+      
+      <div class="resultado-box">
+        Sistema formulado: \(2x + y \le 12\), \(\;x + 2y \le 9\), \(\;x \ge 0\), \(\;y \ge 0\)
+      </div>
+    </div>
+    
+    <!-- PASO 6: INCISO B - INTERCEPTOS -->
+    <div class="paso" id="paso6">
+      <h2>Inciso b: Interceptos de las rectas frontera</h2>
+      
+      <p>Cambiamos el signo \(\le\) por \(=\) y evaluamos \(x = 0\) e \(y = 0\) para cada recta frontera:</p>
+      
+      <h3>Recta 1 \((L_1)\): \(2x + y = 12\)</h3>
+      <table class="tabla-datos">
+        <thead>
+          <tr>
+            <th>Intercepto</th>
+            <th>\(x\)</th>
+            <th>\(y\)</th>
+            <th>Punto de corte</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Eje Y</strong></td>
+            <td>\(0\)</td>
+            <td>\(2(0) + y = 12 \implies y = 12\)</td>
+            <td><strong>\((0, 12)\)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Eje X</strong></td>
+            <td>\(2x + 0 = 12 \implies x = 6\)</td>
+            <td>\(0\)</td>
+            <td><strong>\((6, 0)\)</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Recta 2 \((L_2)\): \(x + 2y = 9\)</h3>
+      <table class="tabla-datos">
+        <thead>
+          <tr>
+            <th>Intercepto</th>
+            <th>\(x\)</th>
+            <th>\(y\)</th>
+            <th>Punto de corte</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Eje Y</strong></td>
+            <td>\(0\)</td>
+            <td>\(0 + 2y = 9 \implies y = 4.5\)</td>
+            <td><strong>\((0, 4.5)\)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Eje X</strong></td>
+            <td>\(x + 2(0) = 9 \implies x = 9\)</td>
+            <td>\(0\)</td>
+            <td><strong>\((9, 0)\)</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Rectas frontera de no negatividad \((L_3 	ext{ y } L_4)\)</h3>
+      <div class="caja-datos">
+        <ul>
+          <li><strong>Recta 3 \((L_3)\): \(x = 0\)</strong> — Corresponde al eje vertical \(Y\) (delimita la región hacia la derecha).</li>
+          <li><strong>Recta 4 \((L_4)\): \(y = 0\)</strong> — Corresponde al eje horizontal \(X\) (delimita la región hacia arriba).</li>
+        </ul>
+      </div>
+    </div>
+    
+        <!-- PASO 7: INCISO B - GRÁFICO INICIAL -->
+    <div class="paso" id="paso7">
+      <h2>Inciso b: Gráfica y Región Factible</h2>
+      
+      <p>Como \(x \ge 0\) e \(y \ge 0\), trabajamos en el primer cuadrante. Evaluando \((0,0)\): \(2(0)+0=0 \le 12\) (Verdadero) y \(0+2(0)=0 \le 9\) (Verdadero), por lo que se sombrea hacia el origen debajo de ambas rectas:</p>
+
+      <div class="grafico-container">
+        <svg viewBox="0 0 920 560" xmlns="http://www.w3.org/2000/svg">
+          <rect width="920" height="560" fill="#fafafa"/>
+          <text x="460" y="34" font-size="19" font-weight="bold" fill="#003366" text-anchor="middle">
+            Gráfica 1: Región Factible y Vértice de Intersección V(x, y)
+          </text>
+          <g stroke="#e5e9f0" stroke-width="1" stroke-dasharray="4,4">
+            <line x1="100" y1="426" x2="800" y2="426"/>
+            <line x1="100" y1="362" x2="800" y2="362"/>
+            <line x1="100" y1="298" x2="800" y2="298"/>
+            <line x1="100" y1="234" x2="800" y2="234"/>
+            <line x1="100" y1="170" x2="800" y2="170"/>
+            <line x1="100" y1="106" x2="800" y2="106"/>
+            <line x1="240" y1="74" x2="240" y2="490"/>
+            <line x1="380" y1="74" x2="380" y2="490"/>
+            <line x1="520" y1="74" x2="520" y2="490"/>
+            <line x1="660" y1="74" x2="660" y2="490"/>
+            <line x1="800" y1="74" x2="800" y2="490"/>
+          </g>
+          <polygon points="100,490 520,490 450,426 100,346" fill="#00796B" opacity="0.22"/>
+          <line x1="100" y1="490" x2="825" y2="490" stroke="#37474F" stroke-width="2.5"/>
+          <line x1="100" y1="490" x2="100" y2="60" stroke="#37474F" stroke-width="2.5"/>
+          <polygon points="825,490 815,485 815,495" fill="#37474F"/>
+          <polygon points="100,60 95,70 105,70" fill="#37474F"/>
+          <text x="805" y="520" font-size="15" font-weight="bold" fill="#37474F">x (clínicas)</text>
+          <text x="45" y="65" font-size="15" font-weight="bold" fill="#37474F">y (sesiones)</text>
+          
+          <text x="100" y="514" font-size="13" fill="#37474F" text-anchor="middle" font-weight="bold">0</text>
+          <line x1="450" y1="485" x2="450" y2="495" stroke="#E65100" stroke-width="2"/>
+          <text x="450" y="514" font-size="13" fill="#E65100" text-anchor="middle" font-weight="bold" font-style="italic">x</text>
+          <line x1="520" y1="485" x2="520" y2="495" stroke="#003366" stroke-width="2.5"/>
+          <text x="520" y="514" font-size="13" fill="#003366" text-anchor="middle" font-weight="bold">6</text>
+          <line x1="730" y1="485" x2="730" y2="495" stroke="#00796B" stroke-width="2.5"/>
+          <text x="730" y="514" font-size="13" fill="#00796B" text-anchor="middle" font-weight="bold">9</text>
+        
+          
+          <text x="86" y="495" font-size="13" fill="#37474F" text-anchor="end">0</text>
+          <line x1="95" y1="426" x2="105" y2="426" stroke="#E65100" stroke-width="2"/>
+          <text x="86" y="431" font-size="13" fill="#E65100" text-anchor="end" font-weight="bold" font-style="italic">y</text>
+          <line x1="95" y1="346" x2="105" y2="346" stroke="#00796B" stroke-width="2.5"/>
+          <text x="86" y="351" font-size="13" fill="#00796B" text-anchor="end" font-weight="bold">4.5</text>
+          <line x1="95" y1="106" x2="105" y2="106" stroke="#003366" stroke-width="2.5"/>
+          <text x="86" y="111" font-size="13" fill="#003366" text-anchor="end" font-weight="bold">12</text>
+        
+          <!-- Rectas frontera de no negatividad: x = 0 y y = 0 -->
+          <line x1="100" y1="68" x2="100" y2="490" stroke="#6A1B9A" stroke-width="3.5"/>
+          <line x1="100" y1="490" x2="815" y2="490" stroke="#0277BD" stroke-width="3.5"/>
+          <line x1="100" y1="106" x2="520" y2="490" stroke="#003366" stroke-width="3.5"/>
+          <line x1="100" y1="346" x2="730" y2="490" stroke="#00796B" stroke-width="3.5"/>
+          
+          <line x1="100" y1="426" x2="450" y2="426" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <line x1="450" y1="426" x2="450" y2="490" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,4"/>
+        
+          <circle cx="100" cy="490" r="6" fill="#2C3E50" stroke="white" stroke-width="2"/>
+          <circle cx="100" cy="106" r="6" fill="#003366" stroke="white" stroke-width="2"/>
+          <circle cx="520" cy="490" r="7" fill="#003366" stroke="white" stroke-width="2"/>
+          <circle cx="100" cy="346" r="7" fill="#00796B" stroke="white" stroke-width="2"/>
+          <circle cx="730" cy="490" r="6" fill="#00796B" stroke="white" stroke-width="2"/>
+          
+          <circle cx="450" cy="426" r="8" fill="#E65100" stroke="white" stroke-width="2"/>
+          <rect x="462" y="392" width="90" height="26" fill="white" stroke="#E65100" stroke-width="1.2" rx="4"/>
+          <text x="507" y="410" font-size="13" font-weight="bold" fill="#E65100" text-anchor="middle">V(x, y)</text>
+        
+          
+          <rect x="112" y="245" width="66" height="24" fill="white" stroke="#6A1B9A" stroke-width="1" rx="4"/>
+          <text x="145" y="261" font-size="12.5" font-weight="bold" fill="#6A1B9A" text-anchor="middle">x = 0</text>
+          <rect x="655" y="456" width="66" height="24" fill="white" stroke="#0277BD" stroke-width="1" rx="4"/>
+          <text x="688" y="472" font-size="12.5" font-weight="bold" fill="#0277BD" text-anchor="middle">y = 0</text>
+          <rect x="255" y="185" width="120" height="26" fill="white" stroke="#003366" stroke-width="1" rx="4"/>
+          <text x="315" y="203" font-size="13" font-weight="bold" fill="#003366" text-anchor="middle">2x + y = 12</text>
+          <rect x="570" y="425" width="115" height="26" fill="white" stroke="#00796B" stroke-width="1" rx="4"/>
+          <text x="627" y="443" font-size="13" font-weight="bold" fill="#00796B" text-anchor="middle">x + 2y = 9</text>
+          <text x="200" y="465" font-size="13" font-weight="bold" fill="#004D40">Región Factible</text>
+          
+          <rect x="615" y="85" width="275" height="185" fill="white" stroke="#e0e0e0" stroke-width="1.5" rx="8"/>
+          <text x="752" y="108" font-size="14" font-weight="bold" fill="#37474F" text-anchor="middle">Leyenda</text>
+          <line x1="630" y1="130" x2="665" y2="130" stroke="#003366" stroke-width="3.5"/>
+          <text x="675" y="135" font-size="12.5" fill="#37474F">L₁: 2x + y = 12 (Cancha)</text>
+          <line x1="630" y1="156" x2="665" y2="156" stroke="#00796B" stroke-width="3.5"/>
+          <text x="675" y="161" font-size="12.5" fill="#37474F">L₂: x + 2y = 9 (Evaluación)</text>
+          <line x1="630" y1="182" x2="665" y2="182" stroke="#6A1B9A" stroke-width="3.5"/>
+          <text x="675" y="187" font-size="12.5" fill="#37474F">L₃: x = 0 (Eje vertical)</text>
+          <line x1="630" y1="208" x2="665" y2="208" stroke="#0277BD" stroke-width="3.5"/>
+          <text x="675" y="213" font-size="12.5" fill="#37474F">L₄: y = 0 (Eje horizontal)</text>
+          <rect x="630" y="227" width="35" height="14" fill="#00796B" opacity="0.25"/>
+          <text x="675" y="239" font-size="12.5" fill="#37474F">Región factible</text>
+          <circle cx="647" cy="257" r="5" fill="#E65100"/>
+          <text x="675" y="262" font-size="12.5" fill="#37474F">Vértice incógnito V(x, y)</text>
+        
+        </svg>
+      </div>
+
+      <p style="text-align: center; color: var(--text-gray); font-style: italic;">En la gráfica observamos los tres vértices sobre los ejes: \((0,0)\), \((6,0)\) y \((0,4.5)\), además del vértice de intersección \(V(x,y)\) entre ambas rectas, que calcularemos en el siguiente paso.</p>
+    </div>
+    <!-- PASO 8: INCISO B - VÉRTICE DE INTERSECCIÓN -->
+    <div class="paso" id="paso8">
+      <h2>Inciso b: Calcular el vértice de intersección \(V\)</h2>
+      
+      <p>Para hallar las coordenadas exactas del vértice incógnito \(V(x,y)\) visto en la gráfica, resolvemos el sistema formado por las dos rectas frontera mediante el <strong>método de reducción</strong>:</p>
+      
+      <div class="ecuacion">
+        \(\begin{cases} (1)\; 2x + y = 12 \\ (2)\; x + 2y = 9 \end{cases}\)
+      </div>
+      
+      <p>Multiplicamos la Ecuación (2) por \(-2\) para eliminar la variable \(x\) y sumamos verticalmente:</p>
+      
+      <div class="ecuacion">
+        \(\begin{aligned} 2x + y &= 12 \\ -2x - 4y &= -18 \\ \hline -3y &= -6 \\ y &= \frac{-6}{-3} = 2 \end{aligned}\)
+      </div>
+
+      <p>Reemplazamos \(y = 2\) en la Ecuación (1):</p>
+
+      <div class="ecuacion">
+        \(\begin{aligned} 2x + 2 &= 12 \\ 2x &= 10 \\ x &= \frac{10}{2} = 5 \end{aligned}\)
+      </div>
+      
+      <div class="resultado-box">
+        Vértice de intersección: \(V(5, 2)\) &nbsp;·&nbsp; Vértices totales: \((0,0),\; (6,0),\; (5,2),\; (0,4.5)\)
+      </div>
+
+      <h3>Gráfica actualizada con el vértice resuelto \(V(5, 2)\)</h3>
+
+      <div class="grafico-container">
+        <svg viewBox="0 0 920 560" xmlns="http://www.w3.org/2000/svg">
+          <rect width="920" height="560" fill="#fafafa"/>
+          <text x="460" y="34" font-size="19" font-weight="bold" fill="#003366" text-anchor="middle">
+            Gráfica 2: Región Factible con Vértice Resuelto V(5, 2)
+          </text>
+          <g stroke="#e5e9f0" stroke-width="1" stroke-dasharray="4,4">
+            <line x1="100" y1="426" x2="800" y2="426"/>
+            <line x1="100" y1="362" x2="800" y2="362"/>
+            <line x1="100" y1="298" x2="800" y2="298"/>
+            <line x1="100" y1="234" x2="800" y2="234"/>
+            <line x1="100" y1="170" x2="800" y2="170"/>
+            <line x1="100" y1="106" x2="800" y2="106"/>
+            <line x1="240" y1="74" x2="240" y2="490"/>
+            <line x1="380" y1="74" x2="380" y2="490"/>
+            <line x1="520" y1="74" x2="520" y2="490"/>
+            <line x1="660" y1="74" x2="660" y2="490"/>
+            <line x1="800" y1="74" x2="800" y2="490"/>
+          </g>
+          <polygon points="100,490 520,490 450,426 100,346" fill="#00796B" opacity="0.22"/>
+          <line x1="100" y1="490" x2="825" y2="490" stroke="#37474F" stroke-width="2.5"/>
+          <line x1="100" y1="490" x2="100" y2="60" stroke="#37474F" stroke-width="2.5"/>
+          <polygon points="825,490 815,485 815,495" fill="#37474F"/>
+          <polygon points="100,60 95,70 105,70" fill="#37474F"/>
+          <text x="805" y="520" font-size="15" font-weight="bold" fill="#37474F">x (clínicas)</text>
+          <text x="45" y="65" font-size="15" font-weight="bold" fill="#37474F">y (sesiones)</text>
+          
+          <text x="100" y="514" font-size="13" fill="#37474F" text-anchor="middle" font-weight="bold">0</text>
+          <line x1="450" y1="485" x2="450" y2="495" stroke="#E65100" stroke-width="2.5"/>
+          <text x="450" y="514" font-size="13" fill="#E65100" text-anchor="middle" font-weight="bold">5</text>
+          <line x1="520" y1="485" x2="520" y2="495" stroke="#003366" stroke-width="2.5"/>
+          <text x="520" y="514" font-size="13" fill="#003366" text-anchor="middle" font-weight="bold">6</text>
+          <line x1="730" y1="485" x2="730" y2="495" stroke="#00796B" stroke-width="2.5"/>
+          <text x="730" y="514" font-size="13" fill="#00796B" text-anchor="middle" font-weight="bold">9</text>
+        
+          
+          <text x="86" y="495" font-size="13" fill="#37474F" text-anchor="end">0</text>
+          <line x1="95" y1="426" x2="105" y2="426" stroke="#E65100" stroke-width="2.5"/>
+          <text x="86" y="431" font-size="13" fill="#E65100" text-anchor="end" font-weight="bold">2</text>
+          <line x1="95" y1="346" x2="105" y2="346" stroke="#00796B" stroke-width="2.5"/>
+          <text x="86" y="351" font-size="13" fill="#00796B" text-anchor="end" font-weight="bold">4.5</text>
+          <line x1="95" y1="106" x2="105" y2="106" stroke="#003366" stroke-width="2.5"/>
+          <text x="86" y="111" font-size="13" fill="#003366" text-anchor="end" font-weight="bold">12</text>
+        
+          <!-- Rectas frontera de no negatividad: x = 0 y y = 0 -->
+          <line x1="100" y1="68" x2="100" y2="490" stroke="#6A1B9A" stroke-width="3.5"/>
+          <line x1="100" y1="490" x2="815" y2="490" stroke="#0277BD" stroke-width="3.5"/>
+          <line x1="100" y1="106" x2="520" y2="490" stroke="#003366" stroke-width="3.5"/>
+          <line x1="100" y1="346" x2="730" y2="490" stroke="#00796B" stroke-width="3.5"/>
+          
+          <line x1="100" y1="426" x2="450" y2="426" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <line x1="450" y1="426" x2="450" y2="490" stroke="#E65100" stroke-width="1.5" stroke-dasharray="5,4"/>
+        
+          <circle cx="100" cy="490" r="6" fill="#2C3E50" stroke="white" stroke-width="2"/>
+          <circle cx="100" cy="106" r="6" fill="#003366" stroke="white" stroke-width="2"/>
+          <circle cx="520" cy="490" r="7" fill="#003366" stroke="white" stroke-width="2"/>
+          <circle cx="100" cy="346" r="7" fill="#00796B" stroke="white" stroke-width="2"/>
+          <circle cx="730" cy="490" r="6" fill="#00796B" stroke="white" stroke-width="2"/>
+          
+          <circle cx="450" cy="426" r="8" fill="#E65100" stroke="white" stroke-width="2"/>
+          <rect x="462" y="392" width="90" height="26" fill="white" stroke="#E65100" stroke-width="1.2" rx="4"/>
+          <text x="507" y="410" font-size="13" font-weight="bold" fill="#E65100" text-anchor="middle">V(5, 2)</text>
+        
+          
+          <rect x="112" y="245" width="66" height="24" fill="white" stroke="#6A1B9A" stroke-width="1" rx="4"/>
+          <text x="145" y="261" font-size="12.5" font-weight="bold" fill="#6A1B9A" text-anchor="middle">x = 0</text>
+          <rect x="655" y="456" width="66" height="24" fill="white" stroke="#0277BD" stroke-width="1" rx="4"/>
+          <text x="688" y="472" font-size="12.5" font-weight="bold" fill="#0277BD" text-anchor="middle">y = 0</text>
+          <rect x="255" y="185" width="120" height="26" fill="white" stroke="#003366" stroke-width="1" rx="4"/>
+          <text x="315" y="203" font-size="13" font-weight="bold" fill="#003366" text-anchor="middle">2x + y = 12</text>
+          <rect x="570" y="425" width="115" height="26" fill="white" stroke="#00796B" stroke-width="1" rx="4"/>
+          <text x="627" y="443" font-size="13" font-weight="bold" fill="#00796B" text-anchor="middle">x + 2y = 9</text>
+          <text x="200" y="465" font-size="13" font-weight="bold" fill="#004D40">Región Factible</text>
+          
+          <rect x="615" y="85" width="275" height="185" fill="white" stroke="#e0e0e0" stroke-width="1.5" rx="8"/>
+          <text x="752" y="108" font-size="14" font-weight="bold" fill="#37474F" text-anchor="middle">Leyenda</text>
+          <line x1="630" y1="130" x2="665" y2="130" stroke="#003366" stroke-width="3.5"/>
+          <text x="675" y="135" font-size="12.5" fill="#37474F">L₁: 2x + y = 12 (Cancha)</text>
+          <line x1="630" y1="156" x2="665" y2="156" stroke="#00796B" stroke-width="3.5"/>
+          <text x="675" y="161" font-size="12.5" fill="#37474F">L₂: x + 2y = 9 (Evaluación)</text>
+          <line x1="630" y1="182" x2="665" y2="182" stroke="#6A1B9A" stroke-width="3.5"/>
+          <text x="675" y="187" font-size="12.5" fill="#37474F">L₃: x = 0 (Eje vertical)</text>
+          <line x1="630" y1="208" x2="665" y2="208" stroke="#0277BD" stroke-width="3.5"/>
+          <text x="675" y="213" font-size="12.5" fill="#37474F">L₄: y = 0 (Eje horizontal)</text>
+          <rect x="630" y="227" width="35" height="14" fill="#00796B" opacity="0.25"/>
+          <text x="675" y="239" font-size="12.5" fill="#37474F">Región factible</text>
+          <circle cx="647" cy="257" r="5" fill="#E65100"/>
+          <text x="675" y="262" font-size="12.5" fill="#37474F">Vértice resuelto V(5, 2)</text>
+        
+        </svg>
+      </div>
+
+    </div>
+    <!-- PASO 9: INCISO C - EVALUACIÓN Q(3,2) -->
+    <div class="paso" id="paso9">
+      <h2>Inciso c: Evaluar el plan propuesto \(Q(3,2)\)</h2>
+      
+      <p>Para comprobar si \(Q(3,2)\) es factible, sustituimos \(x = 3\) e \(y = 2\) en cada restricción del sistema:</p>
+      
+      <div class="ecuacion">
+        <strong>1) Restricción de cancha (\(2x + y \le 12\)):</strong><br><br>
+        \(\begin{aligned} 2(3) + 2 &\le 12 \\ 6 + 2 &\le 12 \\ 8 &\le 12 \quad \longrightarrow \quad \text{Sí cumple (sobran 4 horas)} \end{aligned}\)
+      </div>
+      
+      <div class="ecuacion">
+        <strong>2) Restricción de evaluación (\(x + 2y \le 9\)):</strong><br><br>
+        \(\begin{aligned} 3 + 2(2) &\le 9 \\ 3 + 4 &\le 9 \\ 7 &\le 9 \quad \longrightarrow \quad \text{Sí cumple (sobran 2 horas)} \end{aligned}\)
+      </div>
+      
+      <div class="ecuacion">
+        <strong>3) No negatividad y enteros (\(x \ge 0,\; y \ge 0\)):</strong><br><br>
+        \(\begin{aligned} 3 &\ge 0 \\ 2 &\ge 0 \quad \text{(ambos enteros)} \quad \longrightarrow \quad \text{Sí cumple} \end{aligned}\)
+      </div>
+      
+      <div class="resultado-box">
+        El plan propuesto \(Q(3,2)\) SÍ es factible (pertenece al interior de la región factible).
+      </div>
+
+      <h3>Gráfica con el punto propuesto \(Q(3, 2)\) dentro de la región factible</h3>
+
+      <div class="grafico-container">
+        <svg viewBox="0 0 920 560" xmlns="http://www.w3.org/2000/svg">
+          <rect width="920" height="560" fill="#fafafa"/>
+          <text x="460" y="34" font-size="19" font-weight="bold" fill="#003366" text-anchor="middle">
+            Gráfica 3: Verificación del Punto de Prueba Q(3, 2) en la Región Factible
+          </text>
+          <g stroke="#e5e9f0" stroke-width="1" stroke-dasharray="4,4">
+            <line x1="100" y1="426" x2="800" y2="426"/>
+            <line x1="100" y1="362" x2="800" y2="362"/>
+            <line x1="100" y1="298" x2="800" y2="298"/>
+            <line x1="100" y1="234" x2="800" y2="234"/>
+            <line x1="100" y1="170" x2="800" y2="170"/>
+            <line x1="100" y1="106" x2="800" y2="106"/>
+            <line x1="240" y1="74" x2="240" y2="490"/>
+            <line x1="380" y1="74" x2="380" y2="490"/>
+            <line x1="520" y1="74" x2="520" y2="490"/>
+            <line x1="660" y1="74" x2="660" y2="490"/>
+            <line x1="800" y1="74" x2="800" y2="490"/>
+          </g>
+          <polygon points="100,490 520,490 450,426 100,346" fill="#00796B" opacity="0.22"/>
+          <line x1="100" y1="490" x2="825" y2="490" stroke="#37474F" stroke-width="2.5"/>
+          <line x1="100" y1="490" x2="100" y2="60" stroke="#37474F" stroke-width="2.5"/>
+          <polygon points="825,490 815,485 815,495" fill="#37474F"/>
+          <polygon points="100,60 95,70 105,70" fill="#37474F"/>
+          <text x="805" y="520" font-size="15" font-weight="bold" fill="#37474F">x (clínicas)</text>
+          <text x="45" y="65" font-size="15" font-weight="bold" fill="#37474F">y (sesiones)</text>
+          
+          <text x="100" y="514" font-size="13" fill="#37474F" text-anchor="middle" font-weight="bold">0</text>
+          <line x1="310" y1="485" x2="310" y2="495" stroke="#D84315" stroke-width="2"/>
+          <text x="310" y="514" font-size="13" fill="#D84315" text-anchor="middle" font-weight="bold">3</text>
+          <line x1="450" y1="485" x2="450" y2="495" stroke="#E65100" stroke-width="2"/>
+          <text x="450" y="514" font-size="13" fill="#E65100" text-anchor="middle" font-weight="bold">5</text>
+          <line x1="520" y1="485" x2="520" y2="495" stroke="#003366" stroke-width="2.5"/>
+          <text x="520" y="514" font-size="13" fill="#003366" text-anchor="middle" font-weight="bold">6</text>
+          <line x1="730" y1="485" x2="730" y2="495" stroke="#00796B" stroke-width="2.5"/>
+          <text x="730" y="514" font-size="13" fill="#00796B" text-anchor="middle" font-weight="bold">9</text>
+        
+          
+          <text x="86" y="495" font-size="13" fill="#37474F" text-anchor="end">0</text>
+          <line x1="95" y1="426" x2="105" y2="426" stroke="#37474F" stroke-width="2"/>
+          <text x="86" y="431" font-size="13" fill="#37474F" text-anchor="end" font-weight="bold">2</text>
+          <line x1="95" y1="346" x2="105" y2="346" stroke="#00796B" stroke-width="2.5"/>
+          <text x="86" y="351" font-size="13" fill="#00796B" text-anchor="end" font-weight="bold">4.5</text>
+          <line x1="95" y1="106" x2="105" y2="106" stroke="#003366" stroke-width="2.5"/>
+          <text x="86" y="111" font-size="13" fill="#003366" text-anchor="end" font-weight="bold">12</text>
+        
+          <!-- Rectas frontera de no negatividad: x = 0 y y = 0 -->
+          <line x1="100" y1="68" x2="100" y2="490" stroke="#6A1B9A" stroke-width="3.5"/>
+          <line x1="100" y1="490" x2="815" y2="490" stroke="#0277BD" stroke-width="3.5"/>
+          <line x1="100" y1="106" x2="520" y2="490" stroke="#003366" stroke-width="3.5"/>
+          <line x1="100" y1="346" x2="730" y2="490" stroke="#00796B" stroke-width="3.5"/>
+          
+          <line x1="100" y1="426" x2="450" y2="426" stroke="#5D6D7E" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <line x1="450" y1="426" x2="450" y2="490" stroke="#5D6D7E" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <line x1="310" y1="426" x2="310" y2="490" stroke="#D84315" stroke-width="1.5" stroke-dasharray="5,4"/>
+        
+          <circle cx="100" cy="490" r="6" fill="#2C3E50" stroke="white" stroke-width="2"/>
+          <circle cx="100" cy="106" r="6" fill="#003366" stroke="white" stroke-width="2"/>
+          <circle cx="520" cy="490" r="7" fill="#003366" stroke="white" stroke-width="2"/>
+          <circle cx="100" cy="346" r="7" fill="#00796B" stroke="white" stroke-width="2"/>
+          <circle cx="730" cy="490" r="6" fill="#00796B" stroke="white" stroke-width="2"/>
+          
+          <circle cx="450" cy="426" r="8" fill="#E65100" stroke="white" stroke-width="2"/>
+          <rect x="462" y="392" width="90" height="26" fill="white" stroke="#E65100" stroke-width="1.2" rx="4"/>
+          <text x="507" y="410" font-size="13" font-weight="bold" fill="#E65100" text-anchor="middle">V(5, 2)</text>
+        
+          
+          <circle cx="310" cy="426" r="8" fill="#D84315" stroke="white" stroke-width="2"/>
+          <rect x="265" y="388" width="90" height="26" fill="white" stroke="#D84315" stroke-width="1.2" rx="4"/>
+          <text x="310" y="406" font-size="13" font-weight="bold" fill="#D84315" text-anchor="middle">Q(3, 2)</text>
+        
+          <rect x="112" y="245" width="66" height="24" fill="white" stroke="#6A1B9A" stroke-width="1" rx="4"/>
+          <text x="145" y="261" font-size="12.5" font-weight="bold" fill="#6A1B9A" text-anchor="middle">x = 0</text>
+          <rect x="655" y="456" width="66" height="24" fill="white" stroke="#0277BD" stroke-width="1" rx="4"/>
+          <text x="688" y="472" font-size="12.5" font-weight="bold" fill="#0277BD" text-anchor="middle">y = 0</text>
+          <rect x="255" y="185" width="120" height="26" fill="white" stroke="#003366" stroke-width="1" rx="4"/>
+          <text x="315" y="203" font-size="13" font-weight="bold" fill="#003366" text-anchor="middle">2x + y = 12</text>
+          <rect x="570" y="425" width="115" height="26" fill="white" stroke="#00796B" stroke-width="1" rx="4"/>
+          <text x="627" y="443" font-size="13" font-weight="bold" fill="#00796B" text-anchor="middle">x + 2y = 9</text>
+          <text x="200" y="465" font-size="13" font-weight="bold" fill="#004D40">Región Factible</text>
+          
+          <rect x="615" y="85" width="275" height="185" fill="white" stroke="#e0e0e0" stroke-width="1.5" rx="8"/>
+          <text x="752" y="108" font-size="14" font-weight="bold" fill="#37474F" text-anchor="middle">Leyenda</text>
+          <line x1="630" y1="130" x2="665" y2="130" stroke="#003366" stroke-width="3.5"/>
+          <text x="675" y="135" font-size="12.5" fill="#37474F">L₁: 2x + y = 12 (Cancha)</text>
+          <line x1="630" y1="156" x2="665" y2="156" stroke="#00796B" stroke-width="3.5"/>
+          <text x="675" y="161" font-size="12.5" fill="#37474F">L₂: x + 2y = 9 (Evaluación)</text>
+          <line x1="630" y1="182" x2="665" y2="182" stroke="#6A1B9A" stroke-width="3.5"/>
+          <text x="675" y="187" font-size="12.5" fill="#37474F">L₃: x = 0 (Eje vertical)</text>
+          <line x1="630" y1="208" x2="665" y2="208" stroke="#0277BD" stroke-width="3.5"/>
+          <text x="675" y="213" font-size="12.5" fill="#37474F">L₄: y = 0 (Eje horizontal)</text>
+          <rect x="630" y="227" width="35" height="14" fill="#00796B" opacity="0.25"/>
+          <text x="675" y="239" font-size="12.5" fill="#37474F">Región factible</text>
+          <circle cx="647" cy="257" r="5" fill="#D84315"/>
+          <text x="675" y="262" font-size="12.5" fill="#37474F">Punto de prueba Q(3, 2)</text>
+        
+        </svg>
+      </div>
+
+    </div>
+<!-- PASO 10: INTERPRETACIÓN -->
+    <div class="paso" id="paso10">
+      <h2>Interpretación de los Resultados</h2>
+      
+      <div class="caja-interpreta">
+        <h3>Análisis práctico para el centro de entrenamiento</h3>
+        <ul>
+          <li><strong>Región factible:</strong> Representa todas las combinaciones posibles de clínicas técnicas y sesiones de acondicionamiento físico que el centro puede programar respetando el límite máximo de 12 horas de cancha y 9 horas de evaluación.</li>
+          <li><strong>Vértice de intersección \(V(5,2)\):</strong> Indica que organizar 5 clínicas técnicas y 2 sesiones de acondicionamiento físico agota exactamente la totalidad de ambos recursos (\(2(5)+2 = 12\) horas de cancha y \(5+2(2) = 9\) horas de evaluación).</li>
+          <li><strong>Plan propuesto \(Q(3,2)\):</strong> Realizar 3 clínicas técnicas y 2 sesiones de acondicionamiento físico es totalmente viable y deja capacidad ociosa: se emplean 8 de las 12 horas de cancha (quedan 4 horas libres) y 7 de las 9 horas de evaluación (quedan 2 horas libres).</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- PASO 11: CIERRE -->
+    <div class="paso" id="paso11">
+      <h2>Conclusión</h2>
+      
+      <div class="caja-enunciado">
+        <p>El modelamiento mediante <strong>sistemas de inecuaciones lineales</strong> permite determinar de forma precisa los límites operativos del centro de entrenamiento y verificar la viabilidad de cualquier programación antes de ejecutarla.</p>
+        <p>Mientras que el plan \(Q(3,2)\) ofrece margen operativo con horas disponibles en ambas instalaciones, el vértice \(V(5,2)\) representa el punto de aprovechamiento máximo simultáneo de cancha y evaluación.</p>
+      </div>
+      
+      <div class="resultado-box" style="background: var(--primary);">
+        ✅ Resumen: Vértices \((0,0), (6,0), (5,2), (0,4.5)\) · Plan \(Q(3,2)\) factible (8/12 h cancha, 7/9 h evaluación).
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<script>
+  let pasoActual = 1;
+  const totalPasos = 11;
+  
+  function cambiarPaso(direccion) {
+    const nuevoPaso = pasoActual + direccion;
+    
+    if (nuevoPaso < 1 || nuevoPaso > totalPasos) return;
+    
+    // Ocultar paso actual
+    document.getElementById('paso' + pasoActual).classList.remove('activo');
+    
+    // Mostrar nuevo paso
+    pasoActual = nuevoPaso;
+    document.getElementById('paso' + pasoActual).classList.add('activo');
+    
+    // Actualizar contador
+    document.getElementById('pasoActual').textContent = pasoActual;
+    
+    // Actualizar barra de progreso
+    const progreso = (pasoActual / totalPasos) * 100;
+    document.getElementById('progressFill').style.width = progreso + '%';
+    
+    // Actualizar botones
+    document.getElementById('btnAnterior').disabled = (pasoActual === 1);
+    
+    const btnSiguiente = document.getElementById('btnSiguiente');
+    if (pasoActual === totalPasos) {
+      btnSiguiente.textContent = 'Finalizar ✓';
+      btnSiguiente.disabled = true;
+      btnSiguiente.style.opacity = '0.5';
+    } else {
+      btnSiguiente.textContent = 'Siguiente ▶';
+      btnSiguiente.disabled = false;
+      btnSiguiente.style.opacity = '1';
+    }
+    
+    // Renderizar KaTeX en el nuevo paso
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.getElementById('paso' + pasoActual));
+    }
+    
+    // Scroll al inicio del contenido
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
+  // Render inicial
+  window.addEventListener('load', () => {
+    if (typeof renderMathInElement !== 'undefined') {
+      renderMathInElement(document.body);
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -3,25 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Taller PC2 · Sistemas de inecuaciones y región factible</title>
+  <title>PRODUCTO ACREDITABLE · Matemática I</title>
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-  <main class="tarjeta" id="tarjeta">
+  <main class="panel">
     <header class="cabecera">
       <p class="institucion">Universidad San Ignacio de Loyola · Matemática I · PC2 2026-II</p>
-      <h1>Sistemas de inecuaciones y región factible</h1>
-      <p class="subtitulo" id="subtitulo"></p>
-      <div class="progreso"><div class="progreso-barra" id="progreso-barra"></div></div>
+      <h1>PRODUCTO ACREDITABLE</h1>
+      <p class="subtitulo">Selecciona un taller para resolverlo paso a paso</p>
     </header>
 
-    <section class="contenido" id="contenido" aria-live="polite"></section>
+    <section id="vista-tarjetas" class="tarjetas" aria-label="Talleres disponibles"></section>
 
-    <footer class="pie">
-      <button id="btn-anterior" class="boton boton-secundario" type="button">&#9664; Anterior</button>
-      <span id="indicador" class="indicador"></span>
-      <button id="btn-siguiente" class="boton boton-primario" type="button">Siguiente &#9654;</button>
-    </footer>
+    <section id="vista-taller" class="vista-taller" hidden>
+      <div class="barra-taller">
+        <button id="btn-volver" class="boton" type="button">&#9664; Volver al panel</button>
+        <span id="taller-nombre" class="taller-nombre"></span>
+      </div>
+      <iframe id="iframe-taller" class="iframe-taller" title="Taller" loading="lazy"></iframe>
+    </section>
   </main>
 
   <script src="js/datos.js"></script>
